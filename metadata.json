@@ -1,0 +1,6 @@
+{
+  "name": "Navoice - Real-time AI Voice Scam Shield",
+  "description": "Real-time AI voice scam and deepfake shield detecting synthetic voices (RVC/TTS) in under 4.5 seconds with zero-storage privacy.",
+  "requestFramePermissions": ["microphone"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
