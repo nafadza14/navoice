@@ -27,6 +27,10 @@
       referrerpolicy="no-referrer"
     />
 
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/assets/logo.svg" />
+    <link rel="alternate icon" type="image/png" href="/assets/logo.png" />
+
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
@@ -47,7 +51,7 @@
       <header class="header" id="main-header">
         <!-- Logo -->
         <button class="logo-btn" id="logo-button" aria-label="Navoice Home" data-navigate="view-home">
-          <img src="./assets/logo.webp" alt="Navoice Shield" class="logo-img" width="52" height="52" />
+          <img src="/assets/logo.webp" onerror="this.onerror=null; this.src='/assets/logo.png';" alt="Navoice Shield" class="logo-img" width="52" height="52" />
         </button>
 
         <!-- Desktop Nav Pill -->
