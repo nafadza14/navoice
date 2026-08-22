@@ -51,7 +51,15 @@
       <header class="header" id="main-header">
         <!-- Logo -->
         <button class="logo-btn" id="logo-button" aria-label="Navoice Home" data-navigate="view-home">
-          <img src="/assets/logo.webp" onerror="this.onerror=null; this.src='/assets/logo.png';" alt="Navoice Shield" class="logo-img" width="52" height="52" />
+          <svg class="logo-svg" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M24 6L39 12.5C39 28.5 24 41 24 41C24 41 9 28.5 9 12.5L24 6Z" fill="#121316" stroke="#10B981" stroke-width="2" stroke-linejoin="round"/>
+            <line x1="16.5" y1="21" x2="16.5" y2="27" stroke="#ffffff" stroke-width="2" stroke-linecap="round" />
+            <line x1="20.5" y1="17" x2="20.5" y2="31" stroke="#ffffff" stroke-width="2" stroke-linecap="round" />
+            <line x1="24.5" y1="13" x2="24.5" y2="35" stroke="#10B981" stroke-width="2.6" stroke-linecap="round" />
+            <line x1="28.5" y1="17" x2="28.5" y2="31" stroke="#ffffff" stroke-width="2" stroke-linecap="round" />
+            <line x1="32.5" y1="21" x2="32.5" y2="27" stroke="#ffffff" stroke-width="2" stroke-linecap="round" />
+            <circle cx="24" cy="10.5" r="2" fill="#10B981" />
+          </svg>
         </button>
 
         <!-- Desktop Nav Pill -->
@@ -122,27 +130,45 @@
         
         <!-- VIEW 1: HOME (Landing Page Archetype) -->
         <section class="view-panel active" id="view-home">
-          <!-- Trust row -->
+          <!-- Trust row with User Avatars -->
           <div class="trust-row anim" id="trust-row-badge" style="--d: 0.05s" data-navigate="view-specs">
             <div class="avatar-group">
               <div class="avatar-ring a1">
                 <div class="avatar-inner">
-                  <i class="fa-brands fa-microsoft avatar-icon"></i>
+                  <img
+                    src="https://i.pinimg.com/736x/e6/63/ed/e663ed45422c37c634e422cf1a26713c.jpg"
+                    alt="Navoice User"
+                    class="avatar-img"
+                    referrerpolicy="no-referrer"
+                    loading="lazy"
+                  />
                 </div>
               </div>
               <div class="avatar-ring a2">
                 <div class="avatar-inner">
-                  <i class="fa-brands fa-amazon avatar-icon"></i>
+                  <img
+                    src="https://i.pinimg.com/1200x/a2/49/37/a24937366b9f3bd8965d62babf2c407f.jpg"
+                    alt="Navoice User"
+                    class="avatar-img"
+                    referrerpolicy="no-referrer"
+                    loading="lazy"
+                  />
                 </div>
               </div>
               <div class="avatar-ring a3">
                 <div class="avatar-inner">
-                  <i class="fa-brands fa-google avatar-icon"></i>
+                  <img
+                    src="https://i.pinimg.com/736x/b9/56/e3/b956e364f55e97544c62d41ad6e3901e.jpg"
+                    alt="Navoice User"
+                    class="avatar-img"
+                    referrerpolicy="no-referrer"
+                    loading="lazy"
+                  />
                 </div>
               </div>
             </div>
             <div class="trust-pill">
-              <span class="trust-text">Trusted by 2000+ Enterprises</span>
+              <span class="trust-text">Trusted by 2000+ User</span>
             </div>
           </div>
 
@@ -164,6 +190,25 @@
               <span>Get Started</span>
               <i class="fa-solid fa-arrow-right"></i>
             </button>
+          </div>
+
+          <!-- Google, Amazon, and Windows Logos below Get Started -->
+          <div class="cta-ecosystem-row anim" id="cta-ecosystem-row" style="--d: 0.54s">
+            <div class="avatar-ring" title="Google">
+              <div class="avatar-inner">
+                <i class="fa-brands fa-google avatar-icon"></i>
+              </div>
+            </div>
+            <div class="avatar-ring" title="Amazon">
+              <div class="avatar-inner">
+                <i class="fa-brands fa-amazon avatar-icon"></i>
+              </div>
+            </div>
+            <div class="avatar-ring" title="Windows">
+              <div class="avatar-inner">
+                <i class="fa-brands fa-windows avatar-icon"></i>
+              </div>
+            </div>
           </div>
         </section>
 
@@ -188,6 +233,31 @@
                 <span id="dsp-metrics" style="font-family: monospace;">AASIST INT8 &bull; Sliding Buffer 3.5s</span>
               </div>
               <canvas id="scan-canvas" class="scan-canvas" width="680" height="100"></canvas>
+            </div>
+
+            <!-- Live Acoustic Analysis Breakdown -->
+            <div class="acoustic-metrics-grid" id="live-acoustic-grid">
+              <div class="acoustic-metric-card">
+                <div class="acoustic-metric-label">
+                  <i class="fa-solid fa-wave-square" style="color: #3B82F6;"></i>
+                  <span>Pitch Jitter (F0 Micro-tremor)</span>
+                </div>
+                <div class="acoustic-metric-val" id="metric-jitter">-- %</div>
+              </div>
+              <div class="acoustic-metric-card">
+                <div class="acoustic-metric-label">
+                  <i class="fa-solid fa-bolt" style="color: #EF4444;"></i>
+                  <span>Harmonic / Cutoff Anomaly</span>
+                </div>
+                <div class="acoustic-metric-val" id="metric-hf-anomaly">--</div>
+              </div>
+              <div class="acoustic-metric-card">
+                <div class="acoustic-metric-label">
+                  <i class="fa-solid fa-chart-line" style="color: #10B981;"></i>
+                  <span>Spectral Flatness (Buzz Index)</span>
+                </div>
+                <div class="acoustic-metric-val" id="metric-flatness">--</div>
+              </div>
             </div>
 
             <!-- Dynamic Trust Dial & Gauge (FEAT-002) -->
@@ -322,14 +392,23 @@
               </div>
               <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 11.5px;">
                 <div style="background: rgba(125,125,125,0.08); padding: 6px 10px; border-radius: 8px;">
-                  <span style="color: var(--muted); display: block;">Inference Time:</span>
-                  <span style="font-weight: 600;" id="vn-inference-time">164 ms</span>
+                  <span style="color: var(--muted); display: block;">Inference Time &amp; DSP:</span>
+                  <span style="font-weight: 600;" id="vn-inference-time">164 ms &bull; 44.1kHz</span>
                 </div>
                 <div style="background: rgba(125,125,125,0.08); padding: 6px 10px; border-radius: 8px;">
-                  <span style="color: var(--muted); display: block;">Harmonic Artifacts:</span>
-                  <span style="font-weight: 600;" id="vn-harmonic-stat">Detected (>16kHz)</span>
+                  <span style="color: var(--muted); display: block;">High-Freq Artifacts:</span>
+                  <span style="font-weight: 600;" id="vn-harmonic-stat">Checking...</span>
+                </div>
+                <div style="background: rgba(125,125,125,0.08); padding: 6px 10px; border-radius: 8px;">
+                  <span style="color: var(--muted); display: block;">Pitch Jitter (F0 Perturbation):</span>
+                  <span style="font-weight: 600;" id="vn-jitter-stat">--</span>
+                </div>
+                <div style="background: rgba(125,125,125,0.08); padding: 6px 10px; border-radius: 8px;">
+                  <span style="color: var(--muted); display: block;">Acoustic Diagnosis:</span>
+                  <span style="font-weight: 600;" id="vn-diagnosis-stat">--</span>
                 </div>
               </div>
+              <div id="vn-verdict-explanation" style="margin-top: 8px; font-size: 11px; color: var(--subtext); line-height: 1.45; padding-top: 8px; border-top: 1px solid var(--panel-border);"></div>
             </div>
           </div>
         </section>
