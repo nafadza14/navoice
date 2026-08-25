@@ -4,9 +4,9 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <title>Navoice — Real-time AI Voice Scam &amp; Deepfake Shield</title>
-    <meta name="description" content="Instant real-time detection of synthetic voices (RVC/TTS) and deepfake phone scams in < 4.5 seconds. Zero-storage privacy." />
+    <meta name="description" content="Instant real-time detection of synthetic voices (RVC/TTS) and deepfake phone scams in < 4.5 seconds. Privacy focused." />
     <meta property="og:title" content="Navoice — Real-time AI Voice Scam &amp; Deepfake Shield" />
-    <meta property="og:description" content="Instant real-time detection of synthetic voices (RVC/TTS) and deepfake phone scams in < 4.5 seconds. Zero-storage privacy." />
+    <meta property="og:description" content="Instant real-time detection of synthetic voices (RVC/TTS) and deepfake phone scams in < 4.5 seconds. Privacy focused." />
     <meta property="og:type" content="website" />
     <meta name="twitter:card" content="summary_large_image" />
 
@@ -52,36 +52,42 @@
         <!-- Logo -->
         <button class="logo-btn" id="logo-button" aria-label="Navoice Home" data-navigate="view-home">
           <svg class="logo-svg" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M24 6L39 12.5C39 28.5 24 41 24 41C24 41 9 28.5 9 12.5L24 6Z" fill="#121316" stroke="#10B981" stroke-width="2" stroke-linejoin="round"/>
+            <path d="M24 6L39 12.5C39 28.5 24 41 24 41C24 41 9 28.5 9 12.5L24 6Z" fill="var(--bg)" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
             <line x1="16.5" y1="21" x2="16.5" y2="27" stroke="#ffffff" stroke-width="2" stroke-linecap="round" />
             <line x1="20.5" y1="17" x2="20.5" y2="31" stroke="#ffffff" stroke-width="2" stroke-linecap="round" />
-            <line x1="24.5" y1="13" x2="24.5" y2="35" stroke="#10B981" stroke-width="2.6" stroke-linecap="round" />
+            <line x1="24.5" y1="13" x2="24.5" y2="35" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" />
             <line x1="28.5" y1="17" x2="28.5" y2="31" stroke="#ffffff" stroke-width="2" stroke-linecap="round" />
             <line x1="32.5" y1="21" x2="32.5" y2="27" stroke="#ffffff" stroke-width="2" stroke-linecap="round" />
-            <circle cx="24" cy="10.5" r="2" fill="#10B981" />
+            <circle cx="24" cy="10.5" r="2" fill="currentColor" />
           </svg>
         </button>
 
         <!-- Desktop Nav Pill -->
         <nav class="nav-pill" id="desktop-nav" aria-label="Main Navigation">
           <button class="nav-link active" id="nav-home" data-view="view-home">Home</button>
-          <button class="nav-link" id="nav-product" data-view="view-product">Product</button>
-          <button class="nav-link" id="nav-case-studies" data-view="view-cases">Case Studies</button>
-          <button class="nav-link" id="nav-contact" data-view="view-safety">Safety</button>
+          <button class="nav-link" id="nav-features" data-view="view-features">Features</button>
+          <button class="nav-link" id="nav-solutions" data-view="view-solutions">Solutions</button>
+          <button class="nav-link" id="nav-pricing" data-view="view-pricing">Pricing</button>
           <button class="nav-link" id="nav-specs" data-view="view-specs">Specs</button>
+          <button class="nav-link" id="nav-dashboard" data-view="view-dashboard" style="display: none;">
+            <span style="display: flex; align-items: center; gap: 5px;">
+              <span class="pulse-dot"></span>
+              <span>Dashboard</span>
+            </span>
+          </button>
         </nav>
 
-        <!-- Header Actions: Theme Switcher, CTA, Burger -->
+        <!-- Header Actions: Theme Switcher, Auth CTA, Burger -->
         <div class="header-actions" id="header-actions">
-          <!-- Light / Night Mode Switcher Pill -->
-          <button class="theme-pill-btn" id="theme-toggle-btn" aria-label="Toggle Light and Night Mode" title="Toggle Light / Night Mode">
-            <i class="fa-solid fa-sun" id="theme-toggle-icon"></i>
+          <!-- Light / Night Mode Switcher Pill with Sun & Moon Icon -->
+          <button class="theme-pill-btn" id="theme-toggle-btn" aria-label="Toggle Light and Night Mode" title="Ganti Mode Terang / Gelap">
+            <i class="fa-solid fa-sun" id="theme-toggle-icon" style="font-size: 16px;"></i>
           </button>
 
-          <!-- Live Scanner Launch CTA Button -->
-          <button class="sign-in-pill" id="sign-in-button" data-navigate="view-product">
-            <i class="fa-solid fa-microphone-lines" style="color: #10B981; font-size: 13px;"></i>
-            <span>Live Demo</span>
+          <!-- Auth / Dashboard Button -->
+          <button class="sign-in-pill" id="header-auth-btn">
+            <i class="fa-solid fa-arrow-right-to-bracket" id="header-auth-icon" style="font-size: 13px;"></i>
+            <span id="header-auth-text">Sign In</span>
           </button>
 
           <!-- Mobile Burger Menu Button -->
@@ -100,38 +106,42 @@
           <span>Home</span>
           <i class="fa-solid fa-house" style="font-size: 14px;"></i>
         </button>
-        <button class="mobile-nav-link" data-view="view-product">
-          <span>Product (Live Scanner)</span>
-          <span style="font-size: 10px; background: #10B981; color: #fff; padding: 2px 8px; border-radius: 999px; font-weight: 700;">Live</span>
+        <button class="mobile-nav-link" data-view="view-features">
+          <span>Features &amp; Tech</span>
+          <i class="fa-solid fa-wand-magic-sparkles" style="font-size: 14px; "></i>
         </button>
-        <button class="mobile-nav-link" data-view="view-cases">
-          <span>Case Studies (Voice Notes)</span>
-          <i class="fa-brands fa-whatsapp" style="font-size: 14px; color: #25D366;"></i>
+        <button class="mobile-nav-link" data-view="view-solutions">
+          <span>Solutions (B2B &amp; Family)</span>
+          <i class="fa-solid fa-building-shield" style="font-size: 14px; "></i>
         </button>
-        <button class="mobile-nav-link" data-view="view-safety">
-          <span>Safety &amp; Safe Word</span>
-          <i class="fa-solid fa-shield-virus" style="font-size: 14px; color: #EF4444;"></i>
+        <button class="mobile-nav-link" data-view="view-pricing">
+          <span>Pricing Plans</span>
+          <i class="fa-solid fa-tags" style="font-size: 14px; "></i>
         </button>
         <button class="mobile-nav-link" data-view="view-specs">
-          <span>Tech Specs (INT8 &bull; DSP)</span>
+          <span>Specs &amp; Architecture</span>
           <i class="fa-solid fa-microchip" style="font-size: 14px;"></i>
+        </button>
+        <button class="mobile-nav-link" id="mobile-nav-dashboard" data-view="view-dashboard" style="display: none; background: var(--pill-inactive-bg); color: var(--text); font-weight: 600;">
+          <span>Open Live Dashboard</span>
+          <i class="fa-solid fa-gauge-high" style="font-size: 14px;"></i>
         </button>
         <button class="mobile-nav-link" id="mobile-theme-btn">
           <span id="mobile-theme-label">Switch to Light Mode</span>
-          <i class="fa-solid fa-sun" style="font-size: 14px;"></i>
+          <i class="fa-solid fa-sun mobile-theme-icon-i" style="font-size: 14px; "></i>
         </button>
-        <button class="action-pill-btn" style="width: 100%; margin-top: 4px;" data-view="view-product">
-          <span>Launch Live Scanner</span>
+        <button class="action-pill-btn" id="mobile-auth-action-btn" style="width: 100%; margin-top: 4px;">
+          <span id="mobile-auth-btn-text">Sign In to Dashboard</span>
         </button>
       </div>
 
       <!-- 2) View Panels Container -->
       <div class="views-container" id="views-container">
         
-        <!-- VIEW 1: HOME (Landing Page Archetype) -->
+        <!-- VIEW 1: HOME (SaaS Landing Page) -->
         <section class="view-panel active" id="view-home">
           <!-- Trust row with User Avatars -->
-          <div class="trust-row anim" id="trust-row-badge" style="--d: 0.05s" data-navigate="view-specs">
+          <div class="trust-row anim" id="trust-row-badge" style="--d: 0.05s" data-navigate="view-pricing">
             <div class="avatar-group">
               <div class="avatar-ring a1">
                 <div class="avatar-inner">
@@ -181,12 +191,12 @@
 
           <!-- Subhead -->
           <p class="subhead anim" id="main-subhead" style="--d: 0.38s">
-            Detect synthetic voices (RVC/TTS) and vishing phone scams in &lt;4.5 seconds via loudspeaker scan or voice note analysis. Continuous sliding buffer with zero audio retention.
+            SaaS perlindungan suara AI real-time tingkat enterprise. Deteksi kloning suara sintetis (RVC/TTS) dan vishing telepon dalam &lt;4.5 detik melalui sliding buffer DSP tanpa penyimpanan rekaman.
           </p>
 
-          <!-- Main CTA Button -->
+          <!-- Main CTA Button -> Direct to Auth / Dashboard -->
           <div class="cta-wrapper">
-            <button class="cta-btn revealPulse" id="main-cta-button" style="--d: 0.46s" data-navigate="view-product">
+            <button class="cta-btn revealPulse" id="main-cta-button" style="--d: 0.46s">
               <span>Get Started</span>
               <i class="fa-solid fa-arrow-right"></i>
             </button>
@@ -194,17 +204,17 @@
 
           <!-- Google, Amazon, and Windows Logos below Get Started -->
           <div class="cta-ecosystem-row anim" id="cta-ecosystem-row" style="--d: 0.54s">
-            <div class="avatar-ring" title="Google">
+            <div class="avatar-ring" title="Google Cloud Enterprise Ready">
               <div class="avatar-inner">
                 <i class="fa-brands fa-google avatar-icon"></i>
               </div>
             </div>
-            <div class="avatar-ring" title="Amazon">
+            <div class="avatar-ring" title="AWS Microservices Architecture">
               <div class="avatar-inner">
                 <i class="fa-brands fa-amazon avatar-icon"></i>
               </div>
             </div>
-            <div class="avatar-ring" title="Windows">
+            <div class="avatar-ring" title="Windows VoIP Client Compatible">
               <div class="avatar-inner">
                 <i class="fa-brands fa-windows avatar-icon"></i>
               </div>
@@ -212,266 +222,221 @@
           </div>
         </section>
 
-        <!-- VIEW 2: PRODUCT / LIVE SPEAKER SCAN MODE (FEAT-001 & FEAT-002) -->
-        <section class="view-panel" id="view-product">
-          <div class="dashboard-glass-panel" id="trust-panel">
-            <!-- Panel Header -->
-            <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px;">
-              <div style="display: flex; align-items: center; gap: 10px;">
-                <span style="width: 8px; height: 8px; border-radius: 50%; background: #10B981; display: inline-block;"></span>
-                <span style="font-family: var(--font-display); font-size: 15px; letter-spacing: -0.02em; text-transform: uppercase;">
-                  SPEAKER SCAN MODE &bull; LIVE CALL
-                </span>
+        <!-- VIEW 2: FEATURES (Comprehensive SaaS Capabilities) -->
+        <section class="view-panel" id="view-features">
+          <div class="dashboard-glass-panel saas-feature-panel">
+            <div class="saas-view-header">
+              <div>
+                <span class="badge-tag blue"><i class="fa-solid fa-wand-magic-sparkles"></i> SaaS Features</span>
+                <h2 class="saas-section-title">Teknologi Perlindungan AI Suara Mutakhir</h2>
               </div>
-              <span class="status-pill neutral" style="font-size: 11px;">Zero-Storage Active</span>
-            </div>
-
-            <!-- Audio Mel-Spectrogram & Harmonic Canvas -->
-            <div class="scan-visualizer-box">
-              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; font-size: 11px; color: var(--muted);">
-                <span>Mel-Spectrogram &amp; &gt;16kHz Harmonic Tracker</span>
-                <span id="dsp-metrics" style="font-family: monospace;">AASIST INT8 &bull; Sliding Buffer 3.5s</span>
-              </div>
-              <canvas id="scan-canvas" class="scan-canvas" width="680" height="100"></canvas>
-            </div>
-
-            <!-- Live Acoustic Analysis Breakdown -->
-            <div class="acoustic-metrics-grid" id="live-acoustic-grid">
-              <div class="acoustic-metric-card">
-                <div class="acoustic-metric-label">
-                  <i class="fa-solid fa-wave-square" style="color: #3B82F6;"></i>
-                  <span>Pitch Jitter (F0 Micro-tremor)</span>
-                </div>
-                <div class="acoustic-metric-val" id="metric-jitter">-- %</div>
-              </div>
-              <div class="acoustic-metric-card">
-                <div class="acoustic-metric-label">
-                  <i class="fa-solid fa-bolt" style="color: #EF4444;"></i>
-                  <span>Harmonic / Cutoff Anomaly</span>
-                </div>
-                <div class="acoustic-metric-val" id="metric-hf-anomaly">--</div>
-              </div>
-              <div class="acoustic-metric-card">
-                <div class="acoustic-metric-label">
-                  <i class="fa-solid fa-chart-line" style="color: #10B981;"></i>
-                  <span>Spectral Flatness (Buzz Index)</span>
-                </div>
-                <div class="acoustic-metric-val" id="metric-flatness">--</div>
-              </div>
-            </div>
-
-            <!-- Dynamic Trust Dial & Gauge (FEAT-002) -->
-            <div>
-              <div class="trust-gauge-header">
-                <div>
-                  <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); margin-bottom: 2px;">
-                    Dynamic Trust Score
-                  </div>
-                  <div class="trust-gauge-score" id="trust-gauge-score-display">
-                    <span id="trust-score-num">--</span>
-                    <span style="font-size: 14px; color: var(--muted);" id="trust-score-sub">% Match</span>
-                  </div>
-                </div>
-                <div class="status-pill neutral" id="trust-status-chip">
-                  <span id="trust-status-text">Ready to Scan</span>
-                </div>
-              </div>
-              <div class="trust-bar-bg" style="margin-top: 8px;">
-                <div class="trust-bar-fill" id="trust-status-bar" style="width: 0%; background: #71717a;"></div>
-              </div>
-            </div>
-
-            <!-- Preset Audio & Live Mic Stream Controller -->
-            <div>
-              <div style="font-size: 11.5px; font-weight: 500; color: var(--muted); margin-bottom: 6px;">
-                Pilih Skenario Suara atau Gunakan Live Mic:
-              </div>
-              <div class="presets-pill-group">
-                <button class="preset-pill active" data-preset="scam">
-                  <i class="fa-solid fa-skull-crossbones" style="color: #EF4444;"></i>
-                  <span>Scam AI Clone (RVC)</span>
-                </button>
-                <button class="preset-pill" data-preset="safe">
-                  <i class="fa-solid fa-user-check" style="color: #10B981;"></i>
-                  <span>Human Voice (Safe)</span>
-                </button>
-                <button class="preset-pill" data-preset="noisy">
-                  <i class="fa-solid fa-volume-xmark" style="color: #F59E0B;"></i>
-                  <span>Noisy / Weak GSM</span>
-                </button>
-                <button class="preset-pill" data-preset="mic">
-                  <i class="fa-solid fa-microphone" style="color: #3B82F6;"></i>
-                  <span>Live Mic Ponsel</span>
-                </button>
-              </div>
-            </div>
-
-            <!-- Scan Action Buttons -->
-            <div style="display: flex; gap: 10px; align-items: center;">
-              <button class="action-pill-btn" id="btn-toggle-scan" style="flex: 1;">
-                <i class="fa-solid fa-play" style="font-size: 12px;"></i>
-                <span id="btn-toggle-scan-text">Mulai Analisis Audio</span>
+              <button class="action-pill-btn-sm" id="btn-features-try-dashboard">
+                <i class="fa-solid fa-gauge-high"></i>
+                <span>Buka di Dashboard</span>
               </button>
-              <button class="action-pill-btn" style="background: rgba(239, 68, 68, 0.15); color: #EF4444; border: 1px solid rgba(239, 68, 68, 0.35);" data-navigate="view-safety">
+            </div>
+
+            <div class="saas-features-grid">
+              <div class="saas-feature-card">
+                <div class="feature-icon-box" style="background: var(--pill-inactive-bg); color: var(--text);">
+                  <i class="fa-solid fa-microphone-lines"></i>
+                </div>
+                <div class="feature-content">
+                  <div class="feature-name">Continuous Real-Time Scanner</div>
+                  <p class="feature-desc">Menganalisis mikro-tremor pita suara (Pitch Jitter F0) dan kestabilan formasi vokal manusia asli dalam sliding buffer 3.5 detik.</p>
+                  <span class="feature-subtag">&lt;4.5s Latency &bull; 44.1kHz DSP</span>
+                </div>
+              </div>
+
+              <div class="saas-feature-card">
+                <div class="feature-icon-box" style="background: var(--pill-inactive-bg); color: #25D366;">
+                  <i class="fa-brands fa-whatsapp"></i>
+                </div>
+                <div class="feature-content">
+                  <div class="feature-name">Voice Note Share Extension</div>
+                  <p class="feature-desc">Inspeksi langsung pesan suara WhatsApp (.ogg), Telegram (.m4a), dan Signal tanpa perlu diekspor ke cloud eksternal.</p>
+                  <span class="feature-subtag">Opus / AAC / WAV Support</span>
+                </div>
+              </div>
+
+              <div class="saas-feature-card">
+                <div class="feature-icon-box" style="background: var(--pill-inactive-bg); color: var(--text);">
+                  <i class="fa-solid fa-shield-halved"></i>
+                </div>
+                <div class="feature-content">
+                  <div class="feature-name">Privacy Architecture</div>
+                  <p class="feature-desc">100% inferensi diproses pada RAM volatil (in-memory). Data audio mentah otomatis dihapus seketika setelah skor kalkulasi keluar.</p>
+                  <span class="feature-subtag">GDPR &amp; HIPAA Compliant</span>
+                </div>
+              </div>
+
+              <div class="saas-feature-card">
+                <div class="feature-icon-box" style="background: var(--pill-inactive-bg); color: var(--text);">
+                  <i class="fa-solid fa-key"></i>
+                </div>
+                <div class="feature-content">
+                  <div class="feature-name">Family Safe Words</div>
+                  <p class="feature-desc">Mekanisme verifikasi tantangan rahasia terenkripsi (PBKDF2) untuk menggagalkan skenario penipuan darurat keluarga.</p>
+                  <span class="feature-subtag">Offline Salted Verification</span>
+                </div>
+              </div>
+
+              <div class="saas-feature-card">
+                <div class="feature-icon-box" style="background: var(--pill-inactive-bg); color: var(--text);">
+                  <i class="fa-solid fa-chart-line"></i>
+                </div>
+                <div class="feature-content">
+                  <div class="feature-name">Forensic Audit &amp; Telemetry</div>
+                  <p class="feature-desc">Log terperinci mengenai anomali fase vocoder &gt;16kHz, spectral flatness, dan bukti kuantitatif untuk investigasi fraud.</p>
+                  <span class="feature-subtag">Export PDF &amp; JSON Report</span>
+                </div>
+              </div>
+
+              <div class="saas-feature-card">
+                <div class="feature-icon-box" style="background: var(--pill-inactive-bg); color: #A855F7;">
+                  <i class="fa-solid fa-network-wired"></i>
+                </div>
+                <div class="feature-content">
+                  <div class="feature-name">SIP / VoIP Enterprise Gateway</div>
+                  <p class="feature-desc">Integrasi langsung ke sistem PBX Call Center (Asterisk, Twilio, Genesys) melalui Webhook &amp; gRPC stream.</p>
+                  <span class="feature-subtag">REST &amp; WebSocket API</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- VIEW 3: SOLUTIONS (SaaS Industry & Family Solutions) -->
+        <section class="view-panel" id="view-solutions">
+          <div class="dashboard-glass-panel saas-feature-panel">
+            <div class="saas-view-header">
+              <div>
+                <span class="badge-tag green"><i class="fa-solid fa-building-shield"></i> SaaS Solutions</span>
+                <h2 class="saas-section-title">Solusi Pertahanan untuk Segala Sektor</h2>
+              </div>
+              <button class="action-pill-btn-sm" id="btn-solutions-get-started">
                 <i class="fa-solid fa-shield-virus"></i>
-                <span>Protokol Darurat</span>
+                <span>Aktifkan Perlindungan</span>
               </button>
             </div>
 
-            <!-- Threat Emergency Banner -->
-            <div class="emergency-alert-banner" id="scan-emergency-banner" style="display: none;">
-              <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px;">
-                <div style="display: flex; align-items: center; gap: 8px; font-weight: 700; color: #EF4444; font-size: 13px;">
-                  <i class="fa-solid fa-bell fa-shake"></i>
-                  <span>PERINGATAN: Suara Kloning AI Terdeteksi! (96% Synthetic)</span>
+            <div class="solutions-deck-grid">
+              <div class="solution-card">
+                <div class="solution-header">
+                  <i class="fa-solid fa-building-columns" style=""></i>
+                  <h3>FinTech &amp; Perbankan</h3>
                 </div>
-                <button id="btn-quick-end-call" style="background: #EF4444; color: #ffffff; border: none; padding: 5px 12px; border-radius: 999px; font-size: 11px; font-weight: 600; cursor: pointer;">
-                  Akhiri Panggilan
-                </button>
+                <p class="solution-body">Cegah otorisasi transfer dana palsu via telepon yang menggunakan kloning suara eksekutif (CEO Voice Fraud) pada layanan perbankan korporat.</p>
+                <div class="solution-impact">
+                  <span class="impact-metric">0% Fraud Loss</span>
+                  <span class="impact-desc">Verifikasi biometrik audio saat sesi panggilan transfer</span>
+                </div>
+              </div>
+
+              <div class="solution-card">
+                <div class="solution-header">
+                  <i class="fa-solid fa-people-roof" style=""></i>
+                  <h3>Keluarga &amp; Individu VIP</h3>
+                </div>
+                <p class="solution-body">Lindungi orang tua dan kerabat dari ancaman pemerasan atau kabar darurat palsu (anak kecelakaan/tertangkap) yang memanfaatkan suara AI.</p>
+                <div class="solution-impact">
+                  <span class="impact-metric">Safe Word Sync</span>
+                  <span class="impact-desc">Protokol darurat instan dalam aplikasi seluler</span>
+                </div>
+              </div>
+
+              <div class="solution-card">
+                <div class="solution-header">
+                  <i class="fa-solid fa-headset" style=""></i>
+                  <h3>Enterprise Contact Centers</h3>
+                </div>
+                <p class="solution-body">Berikan peringatan real-time Heads-Up Display (HUD) kepada agen customer service saat penelepon terindikasi menggunakan Voice Changer atau TTS.</p>
+                <div class="solution-impact">
+                  <span class="impact-metric">&lt;150ms Stream DSP</span>
+                  <span class="impact-desc">Tanpa menambah jeda percakapan agen</span>
+                </div>
               </div>
             </div>
           </div>
         </section>
 
-        <!-- VIEW 3: CASE STUDIES / VOICE NOTE EXTENSION (FEAT-003) -->
-        <section class="view-panel" id="view-cases">
-          <div class="dashboard-glass-panel">
-            <div style="display: flex; align-items: center; justify-content: space-between;">
-              <div style="display: flex; align-items: center; gap: 10px;">
-                <i class="fa-brands fa-whatsapp" style="color: #25D366; font-size: 18px;"></i>
-                <span style="font-family: var(--font-display); font-size: 15px; letter-spacing: -0.02em; text-transform: uppercase;">
-                  VOICE NOTE SHARE EXTENSION
-                </span>
+        <!-- VIEW 4: PRICING (SaaS Subscription Tiers) -->
+        <section class="view-panel" id="view-pricing">
+          <div class="dashboard-glass-panel saas-feature-panel">
+            <div class="saas-view-header">
+              <div>
+                <span class="badge-tag orange"><i class="fa-solid fa-tags"></i> SaaS Pricing</span>
+                <h2 class="saas-section-title">Paket Fleksibel Sesuai Kebutuhan Anda</h2>
               </div>
-              <span class="status-pill neutral" style="font-size: 11px;">WA &bull; TG &bull; iOS</span>
+              <span class="status-pill safe" style="font-size: 11px;">Privacy Protected</span>
             </div>
 
-            <!-- Drag & Drop Upload Zone -->
-            <div class="vn-dropzone" id="vn-dropzone">
-              <input type="file" id="vn-file-input" accept=".ogg,.mp3,.m4a,.wav,audio/*" style="display: none;" />
-              <i class="fa-solid fa-cloud-arrow-up" style="font-size: 24px; color: #10B981;"></i>
-              <div style="font-size: 13.5px; font-weight: 600;">Tarik &amp; Lepas File Voice Note atau Klik untuk Analisis</div>
-              <div style="font-size: 11.5px; color: var(--muted);">Format didukung: .OGG (WhatsApp Opus), .M4A (Telegram/iOS), .MP3, .WAV</div>
-            </div>
+            <div class="pricing-deck-grid">
+              <!-- Tier 1: Personal Shield -->
+              <div class="pricing-card">
+                <div class="pricing-tier-badge">Personal Shield</div>
+                <div class="pricing-price-box">
+                  <span class="pricing-currency">$</span>
+                  <span class="pricing-amount">0</span>
+                  <span class="pricing-period">/bulan</span>
+                </div>
+                <p class="pricing-desc">Perlindungan dasar untuk penggunaan harian dan keluarga.</p>
+                <ul class="pricing-features-list">
+                  <li><i class="fa-solid fa-check"></i> 10 Real-time Call Scan / hari</li>
+                  <li><i class="fa-solid fa-check"></i> Voice Note Share Extension</li>
+                  <li><i class="fa-solid fa-check"></i> Family Safe Words</li>
+                  <li><i class="fa-solid fa-check"></i> In-Memory Privacy</li>
+                </ul>
+                <button class="pricing-cta-btn" id="btn-pricing-free">Pilih Starter (Gratis)</button>
+              </div>
 
-            <!-- Quick Simulation Cases -->
-            <div>
-              <div style="font-size: 11.5px; font-weight: 500; color: var(--muted); margin-bottom: 6px;">
-                Atau Klik Contoh Voice Note Kasus Nyata:
-              </div>
-              <div style="display: flex; flex-direction: column; gap: 6px;">
-                <div class="sample-vn-pill" data-sample="scam-vn">
-                  <div style="display: flex; align-items: center; gap: 8px;">
-                    <i class="fa-solid fa-circle-play" style="color: #EF4444; font-size: 16px;"></i>
-                    <div style="text-align: left;">
-                      <div style="font-size: 12.5px; font-weight: 600;">Mama_Minta_Transfer_Darurat.ogg</div>
-                      <div style="font-size: 11px; color: var(--muted);">WhatsApp Voice Note &bull; 0:08 &bull; RVC Voice Clone</div>
-                    </div>
-                  </div>
-                  <span class="status-pill danger" style="font-size: 11px;">Test Deepfake</span>
+              <!-- Tier 2: Pro Plan (Recommended) -->
+              <div class="pricing-card featured">
+                <div class="pricing-featured-tag">Paling Populer</div>
+                <div class="pricing-tier-badge" style="color: var(--text);">Pro Plan</div>
+                <div class="pricing-price-box">
+                  <span class="pricing-currency">$</span>
+                  <span class="pricing-amount">19</span>
+                  <span class="pricing-period">/bulan</span>
                 </div>
+                <p class="pricing-desc">Perlindungan tanpa batas dengan prioritas inferensi DSP.</p>
+                <ul class="pricing-features-list">
+                  <li><i class="fa-solid fa-check"></i> <strong>Unlimited Live Mic &amp; Call Scan</strong></li>
+                  <li><i class="fa-solid fa-check"></i> Auto WhatsApp &amp; Telegram Guard</li>
+                  <li><i class="fa-solid fa-check"></i> 5 Kursi Akun Anggota Keluarga</li>
+                  <li><i class="fa-solid fa-check"></i> Laporan Audit Forensik &gt;16kHz</li>
+                  <li><i class="fa-solid fa-check"></i> Prioritas Latensi &lt;150ms</li>
+                </ul>
+                <button class="pricing-cta-btn featured-btn" id="btn-pricing-pro">Mulai Akses Pro</button>
+              </div>
 
-                <div class="sample-vn-pill" data-sample="safe-vn">
-                  <div style="display: flex; align-items: center; gap: 8px;">
-                    <i class="fa-solid fa-circle-play" style="color: #10B981; font-size: 16px;"></i>
-                    <div style="text-align: left;">
-                      <div style="font-size: 12.5px; font-weight: 600;">Ayah_Konfirmasi_Rumah.m4a</div>
-                      <div style="font-size: 11px; color: var(--muted);">Telegram Audio &bull; 0:14 &bull; Natural Human Voice</div>
-                    </div>
-                  </div>
-                  <span class="status-pill safe" style="font-size: 11px;">Test Human</span>
+              <!-- Tier 3: Enterprise Sentinel -->
+              <div class="pricing-card">
+                <div class="pricing-tier-badge">Enterprise</div>
+                <div class="pricing-price-box">
+                  <span class="pricing-currency">$</span>
+                  <span class="pricing-amount">99</span>
+                  <span class="pricing-period">/bulan</span>
                 </div>
+                <p class="pricing-desc">Integrasi PBX, SIP Trunking, dan API Call Center.</p>
+                <ul class="pricing-features-list">
+                  <li><i class="fa-solid fa-check"></i> Full VoIP &amp; SIP Gateway</li>
+                  <li><i class="fa-solid fa-check"></i> Kursi Agen Tak Terbatas</li>
+                  <li><i class="fa-solid fa-check"></i> Custom Acoustic Threshold</li>
+                  <li><i class="fa-solid fa-check"></i> SLA 99.9% &amp; Dedicated Support</li>
+                </ul>
+                <button class="pricing-cta-btn" id="btn-pricing-enterprise">Hubungi Sales / Coba API</button>
               </div>
-            </div>
-
-            <!-- Analysis Benchmark Box -->
-            <div id="vn-result-box" style="display: none; background: var(--pill-inactive-bg); border-radius: 14px; padding: 12px; border: 1px solid var(--panel-border);">
-              <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
-                <span style="font-size: 11.5px; color: var(--muted);" id="vn-analyzing-file-name">Voice_Note.ogg</span>
-                <span id="vn-result-badge" class="status-pill neutral"></span>
-              </div>
-              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 11.5px;">
-                <div style="background: rgba(125,125,125,0.08); padding: 6px 10px; border-radius: 8px;">
-                  <span style="color: var(--muted); display: block;">Inference Time &amp; DSP:</span>
-                  <span style="font-weight: 600;" id="vn-inference-time">164 ms &bull; 44.1kHz</span>
-                </div>
-                <div style="background: rgba(125,125,125,0.08); padding: 6px 10px; border-radius: 8px;">
-                  <span style="color: var(--muted); display: block;">High-Freq Artifacts:</span>
-                  <span style="font-weight: 600;" id="vn-harmonic-stat">Checking...</span>
-                </div>
-                <div style="background: rgba(125,125,125,0.08); padding: 6px 10px; border-radius: 8px;">
-                  <span style="color: var(--muted); display: block;">Pitch Jitter (F0 Perturbation):</span>
-                  <span style="font-weight: 600;" id="vn-jitter-stat">--</span>
-                </div>
-                <div style="background: rgba(125,125,125,0.08); padding: 6px 10px; border-radius: 8px;">
-                  <span style="color: var(--muted); display: block;">Acoustic Diagnosis:</span>
-                  <span style="font-weight: 600;" id="vn-diagnosis-stat">--</span>
-                </div>
-              </div>
-              <div id="vn-verdict-explanation" style="margin-top: 8px; font-size: 11px; color: var(--subtext); line-height: 1.45; padding-top: 8px; border-top: 1px solid var(--panel-border);"></div>
             </div>
           </div>
         </section>
 
-        <!-- VIEW 4: SAFETY PROTOCOL & SAFE WORD (FEAT-004) -->
-        <section class="view-panel" id="view-safety">
-          <div class="dashboard-glass-panel">
-            <div style="display: flex; align-items: center; justify-content: space-between;">
-              <div style="display: flex; align-items: center; gap: 10px;">
-                <i class="fa-solid fa-shield-virus" style="color: #EF4444; font-size: 18px;"></i>
-                <span style="font-family: var(--font-display); font-size: 15px; letter-spacing: -0.02em; text-transform: uppercase;">
-                  EMERGENCY SAFETY PROTOCOL
-                </span>
-              </div>
-              <span class="status-pill danger" style="font-size: 11px;">Zero-Trust Shield</span>
-            </div>
-
-            <!-- 3 Step Protocol -->
-            <div style="display: flex; flex-direction: column; gap: 8px;">
-              <div class="protocol-step">
-                <div class="protocol-num" style="background: #EF4444;">1</div>
-                <div>
-                  <div style="font-weight: 600; font-size: 12.5px;">Akhiri Panggilan Segera (End Call)</div>
-                  <div style="color: var(--muted); font-size: 11px;">Jangan pernah mentransfer uang atau membagikan OTP saat dalam panggilan terindikasi.</div>
-                </div>
-              </div>
-              <div class="protocol-step">
-                <div class="protocol-num" style="background: #3B82F6;">2</div>
-                <div>
-                  <div style="font-weight: 600; font-size: 12.5px;">Tanyakan "Safe Word" Keluarga</div>
-                  <div style="color: var(--muted); font-size: 11px;">Gunakan kata sandi rahasia keluarga yang hanya diketahui kerabat dekat Anda.</div>
-                </div>
-              </div>
-              <div class="protocol-step">
-                <div class="protocol-num" style="background: #10B981;">3</div>
-                <div>
-                  <div style="font-weight: 600; font-size: 12.5px;">Verifikasi Ulang Jalur Seluler (GSM)</div>
-                  <div style="color: var(--muted); font-size: 11px;">Hubungi kembali nomor kontak asli kerabat Anda via panggilan GSM biasa.</div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Interactive Safe Word Tester -->
-            <div style="background: var(--pill-inactive-bg); padding: 12px; border-radius: 14px; border: 1px solid var(--panel-border);">
-              <div style="font-size: 12px; font-weight: 600; margin-bottom: 6px; display: flex; align-items: center; gap: 6px;">
-                <i class="fa-solid fa-key" style="color: #F59E0B;"></i>
-                <span>Simulasi Verifikasi Safe Word Keluarga</span>
-              </div>
-              <div style="display: flex; gap: 8px;">
-                <input type="text" id="input-safeword" placeholder="Ketik Safe Word (contoh: Garuda2026)" style="flex: 1; height: 36px; background: rgba(125,125,125,0.1); border: 1px solid var(--panel-border); border-radius: 8px; padding: 0 10px; color: var(--text); font-size: 12px;" />
-                <button id="btn-verify-safeword" class="action-pill-btn" style="height: 36px; padding: 0 14px; font-size: 12px;">Verifikasi</button>
-              </div>
-              <div id="safeword-result" style="font-size: 11.5px; margin-top: 6px; display: none;"></div>
-            </div>
-          </div>
-        </section>
-
-        <!-- VIEW 5: TECH SPECS & ZERO-STORAGE ARCHITECTURE -->
+        <!-- VIEW 5: TECH SPECS & ARCHITECTURE -->
         <section class="view-panel" id="view-specs">
           <div class="dashboard-glass-panel">
             <div style="display: flex; align-items: center; justify-content: space-between;">
               <div style="display: flex; align-items: center; gap: 10px;">
-                <i class="fa-solid fa-microchip" style="color: #3B82F6; font-size: 18px;"></i>
+                <i class="fa-solid fa-microchip" style="font-size: 18px;"></i>
                 <span style="font-family: var(--font-display); font-size: 15px; letter-spacing: -0.02em; text-transform: uppercase;">
                   ARCHITECTURE &amp; PRIVACY
                 </span>
@@ -481,7 +446,7 @@
 
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
               <div style="background: var(--pill-inactive-bg); padding: 10px 12px; border-radius: 12px; border: 1px solid var(--panel-border);">
-                <div style="color: var(--muted); font-size: 10.5px;">ML Core Model</div>
+                <div style="color: var(--muted); font-size: 10.5px;">Core Model</div>
                 <div style="font-weight: 600; font-size: 12.5px; margin-top: 2px;">AASIST / MobileNetV3</div>
               </div>
               <div style="background: var(--pill-inactive-bg); padding: 10px 12px; border-radius: 12px; border: 1px solid var(--panel-border);">
@@ -494,14 +459,476 @@
               </div>
               <div style="background: var(--pill-inactive-bg); padding: 10px 12px; border-radius: 12px; border: 1px solid var(--panel-border);">
                 <div style="color: var(--muted); font-size: 10.5px;">Privacy Policy</div>
-                <div style="font-weight: 600; font-size: 12.5px; margin-top: 2px; color: #10B981;">Zero Audio Retention</div>
+                <div style="font-weight: 600; font-size: 12.5px; margin-top: 2px; color: var(--text);">Zero Audio Retention</div>
               </div>
             </div>
 
             <div style="background: var(--pill-inactive-bg); padding: 12px; border-radius: 12px; font-size: 11.5px; color: var(--subtext); line-height: 1.5; border: 1px solid var(--panel-border);">
-              <strong style="color: var(--text);">Zero-Storage Guarantee:</strong>
+              <strong style="color: var(--text);">Privacy:</strong>
               Cuplikan audio hanya diproses di volatile RAM selama 3.5 detik sliding window. Setelah ekstraksi spektrogram selesai, buffer mentah langsung dihapus tanpa rekaman disk atau transmisi cloud.
             </div>
+
+            <div style="display: flex; gap: 8px;">
+              <button class="action-pill-btn" style="flex: 1; font-size: 12px;" id="btn-specs-open-dashboard">
+                <i class="fa-solid fa-terminal"></i>
+                <span>Jalankan di Live Dashboard</span>
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <!-- VIEW 6: SAAS AUTHENTICATED DASHBOARD (ALL FUNCTIONS & FEATURES LIVE HERE) -->
+        <section class="view-panel" id="view-dashboard" style="padding: 0; width: 100vw; height: 100vh; max-width: 100%; border: none; background: var(--bg);">
+          <div class="saas-dashboard-layout">
+            
+            <!-- Sidebar -->
+            <aside class="saas-sidebar">
+              
+              <!-- Brand/Logo Area -->
+              <div class="saas-sidebar-header">
+                <button class="logo-btn" id="dash-logo-button" aria-label="Navoice Home" data-navigate="view-home">
+                  <svg class="logo-svg" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M24 6L39 12.5C39 28.5 24 41 24 41C24 41 9 28.5 9 12.5L24 6Z" fill="var(--bg)" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                    <line x1="16.5" y1="21" x2="16.5" y2="27" stroke="#ffffff" stroke-width="2" stroke-linecap="round" />
+                    <line x1="20.5" y1="17" x2="20.5" y2="31" stroke="#ffffff" stroke-width="2" stroke-linecap="round" />
+                    <line x1="24.5" y1="13" x2="24.5" y2="35" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" />
+                    <line x1="28.5" y1="17" x2="28.5" y2="31" stroke="#ffffff" stroke-width="2" stroke-linecap="round" />
+                    <line x1="32.5" y1="21" x2="32.5" y2="27" stroke="#ffffff" stroke-width="2" stroke-linecap="round" />
+                    <circle cx="24" cy="10.5" r="2" fill="currentColor" />
+                  </svg>
+                  <span style="font-size: 15px; font-weight: 700; color: var(--text);">Navoice</span>
+                </button>
+              </div>
+
+              <!-- Main Navigation Links -->
+              <nav class="saas-sidebar-nav" id="dashboard-tabs">
+                <div class="saas-nav-label">Scanners</div>
+                <button class="dash-tab-btn active" data-tab="tab-scanner">
+                  <i class="fa-solid fa-microphone-lines"></i>
+                  <span>Live Scanner</span>
+                </button>
+                
+                <button class="dash-tab-btn" data-tab="tab-voicenote">
+                  <i class="fa-brands fa-whatsapp"></i>
+                  <span>File Upload</span>
+                </button>
+                <button class="dash-tab-btn" data-tab="tab-voiceclone">
+                  <i class="fa-solid fa-masks-theater"></i>
+                  <span>Voice Clone</span>
+                </button>
+
+                
+                <div class="saas-nav-label" style="margin-top: 16px;">System</div>
+                <button class="dash-tab-btn" data-tab="tab-safeword">
+                  <i class="fa-solid fa-key"></i>
+                  <span>Safe Words</span>
+                </button>
+                <button class="dash-tab-btn" data-tab="tab-logs">
+                  <i class="fa-solid fa-clipboard-list"></i>
+                  <span>Audit Logs</span>
+                </button>
+                <button class="dash-tab-btn" data-tab="tab-api">
+                  <i class="fa-solid fa-code"></i>
+                  <span>API &amp; Webhooks</span>
+                </button>
+              </nav>
+
+              <!-- Sidebar Footer (User Info & Actions) -->
+              <div class="saas-sidebar-footer">
+                <div class="user-profile-meta">
+                  <div class="user-avatar-circle" id="user-avatar-initials">AM</div>
+                  <div>
+                    <div class="user-name-row" style="margin-bottom: 2px;">
+                      <span class="user-display-name" id="user-display-name">Alex Mercer</span>
+                    </div>
+                    <div class="user-sub-email" id="user-display-email" style="font-size: 10px;">pro_security@navoice.ai</div>
+                  </div>
+                </div>
+                
+                <div class="dash-footer-actions">
+                  <div class="plan-pill pro" style="text-align: center; width: 100%; margin-bottom: 8px;">Pro Plan</div>
+                  <button class="btn-logout" id="btn-dashboard-logout" title="Sign Out dari Dashboard" style="width: 100%; justify-content: center;">
+                    <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                    <span>Sign Out</span>
+                  </button>
+                </div>
+              </div>
+
+            </aside>
+
+            <!-- Main Content Area -->
+            <main class="saas-main-content">
+              <div class="saas-main-header">
+                <div>
+                  <h2 class="saas-page-title">Security Dashboard</h2>
+                  <p class="saas-page-subtitle">Real-time voice verification and threat analysis.</p>
+                </div>
+                <div>
+                  <span class="status-pill safe"><i class="fa-solid fa-shield-check"></i> System Online</span>
+                </div>
+              </div>
+
+              <div class="saas-tab-container">
+            <div class="dash-tab-pane active" id="tab-scanner">
+              <!-- Audio Mel-Spectrogram & Harmonic Canvas -->
+              <div class="scan-visualizer-box">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; font-size: 11px; color: var(--muted);">
+                  <span>Mel-Spectrogram &amp; &gt;16kHz Harmonic Tracker</span>
+                  <span id="dsp-metrics" style="font-family: monospace;">AASIST INT8 &bull; Sliding Buffer 3.5s</span>
+                </div>
+                <canvas id="scan-canvas" class="scan-canvas" width="680" height="100"></canvas>
+              </div>
+
+              <!-- Live Acoustic Analysis Breakdown -->
+              <div class="acoustic-metrics-grid" id="live-acoustic-grid">
+                <div class="acoustic-metric-card">
+                  <div class="acoustic-metric-label">
+                    <i class="fa-solid fa-wave-square" style=""></i>
+                    <span>Pitch Jitter (F0 Micro-tremor)</span>
+                  </div>
+                  <div class="acoustic-metric-val" id="metric-jitter">-- %</div>
+                </div>
+                <div class="acoustic-metric-card">
+                  <div class="acoustic-metric-label">
+                    <i class="fa-solid fa-bolt" style=""></i>
+                    <span>Harmonic / Cutoff Anomaly</span>
+                  </div>
+                  <div class="acoustic-metric-val" id="metric-hf-anomaly">--</div>
+                </div>
+                <div class="acoustic-metric-card">
+                  <div class="acoustic-metric-label">
+                    <i class="fa-solid fa-chart-line" style=""></i>
+                    <span>Spectral Flatness (Buzz Index)</span>
+                  </div>
+                  <div class="acoustic-metric-val" id="metric-flatness">--</div>
+                </div>
+              </div>
+
+              <!-- Dynamic Trust Dial & Gauge -->
+              <div>
+                <div class="trust-gauge-header">
+                  <div>
+                    <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); margin-bottom: 2px;">
+                      Dynamic Trust Score
+                    </div>
+                    <div class="trust-gauge-score" id="trust-gauge-score-display">
+                      <span id="trust-score-num">--</span>
+                      <span style="font-size: 14px; color: var(--muted);" id="trust-score-sub">% Match</span>
+                    </div>
+                  </div>
+                  <div class="status-pill neutral" id="trust-status-chip">
+                    <span id="trust-status-text">Ready to Scan</span>
+                  </div>
+                </div>
+                <div class="trust-bar-bg" style="margin-top: 8px;">
+                  <div class="trust-bar-fill" id="trust-status-bar" style="width: 0%; background: #71717a;"></div>
+                </div>
+              </div>
+
+              <!-- Preset Audio & Live Mic Stream Controller -->
+              <div>
+                <div style="font-size: 11.5px; font-weight: 500; color: var(--muted); margin-bottom: 6px;">
+                  Pilih Skenario Suara atau Gunakan Live Mic Ponsel:
+                </div>
+                <div class="presets-pill-group">
+                  <button class="preset-pill active" data-preset="scam">
+                    <i class="fa-solid fa-skull-crossbones" style=""></i>
+                    <span>Scam AI Clone (RVC)</span>
+                  </button>
+                  <button class="preset-pill" data-preset="safe">
+                    <i class="fa-solid fa-user-check" style=""></i>
+                    <span>Human Voice (Safe)</span>
+                  </button>
+                  <button class="preset-pill" data-preset="noisy">
+                    <i class="fa-solid fa-volume-xmark" style=""></i>
+                    <span>Noisy / Weak GSM</span>
+                  </button>
+                  <button class="preset-pill" data-preset="mic">
+                    <i class="fa-solid fa-microphone" style=""></i>
+                    <span>Live Mic Ponsel</span>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Scan Action Buttons -->
+              <div style="display: flex; gap: 10px; align-items: center;">
+                <button class="action-pill-btn" id="btn-toggle-scan" style="flex: 1;">
+                  <i class="fa-solid fa-play" style="font-size: 12px;"></i>
+                  <span id="btn-toggle-scan-text">Mulai Analisis Audio</span>
+                </button>
+                <button class="action-pill-btn" style="background: var(--pill-inactive-bg); color: var(--text); border: 1px solid rgba(239, 68, 68, 0.35);" data-tab-switch="tab-safeword">
+                  <i class="fa-solid fa-shield-virus"></i>
+                  <span>Protokol Darurat</span>
+                </button>
+              </div>
+
+              <!-- Threat Emergency Banner -->
+              <div class="emergency-alert-banner" id="scan-emergency-banner" style="display: none;">
+                <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px;">
+                  <div style="display: flex; align-items: center; gap: 8px; font-weight: 700; color: var(--text); font-size: 13px;">
+                    <i class="fa-solid fa-bell fa-shake"></i>
+                    <span>PERINGATAN: Suara Kloning AI Terdeteksi! (96% Synthetic)</span>
+                  </div>
+                  <button id="btn-quick-end-call" style="background: var(--text); color: #ffffff; border: none; padding: 5px 12px; border-radius: 999px; font-size: 11px; font-weight: 600; cursor: pointer;">
+                    Akhiri Panggilan
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- TAB 2: VOICE NOTE EXTENSION -->
+            <div class="dash-tab-pane" id="tab-voicenote">
+              <!-- Drag & Drop Upload Zone -->
+              <div class="vn-dropzone" id="vn-dropzone">
+                <input type="file" id="vn-file-input" accept=".ogg,.mp3,.m4a,.wav,audio/*" style="display: none;" />
+                <i class="fa-solid fa-cloud-arrow-up" style="font-size: 24px; "></i>
+                <div style="font-size: 13.5px; font-weight: 600;">Tarik &amp; Lepas File Voice Note atau Klik untuk Analisis</div>
+                <div style="font-size: 11.5px; color: var(--muted);">Format didukung: .OGG (WhatsApp Opus), .M4A (Telegram/iOS), .MP3, .WAV</div>
+              </div>
+
+              <!-- Quick Simulation Cases -->
+              <div>
+                <div style="font-size: 11.5px; font-weight: 500; color: var(--muted); margin-bottom: 6px;">
+                  Atau Klik Contoh Voice Note Kasus Nyata:
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 6px;">
+                  <div class="sample-vn-pill" data-sample="scam-vn">
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                      <i class="fa-solid fa-circle-play" style="font-size: 16px;"></i>
+                      <div style="text-align: left;">
+                        <div style="font-size: 12.5px; font-weight: 600;">Mama_Minta_Transfer_Darurat.ogg</div>
+                        <div style="font-size: 11px; color: var(--muted);">WhatsApp Voice Note &bull; 0:08 &bull; RVC Voice Clone</div>
+                      </div>
+                    </div>
+                    <span class="status-pill danger" style="font-size: 11px;">Test Deepfake</span>
+                  </div>
+
+                  <div class="sample-vn-pill" data-sample="safe-vn">
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                      <i class="fa-solid fa-circle-play" style="font-size: 16px;"></i>
+                      <div style="text-align: left;">
+                        <div style="font-size: 12.5px; font-weight: 600;">Ayah_Konfirmasi_Rumah.m4a</div>
+                        <div style="font-size: 11px; color: var(--muted);">Telegram Audio &bull; 0:14 &bull; Natural Human Voice</div>
+                      </div>
+                    </div>
+                    <span class="status-pill safe" style="font-size: 11px;">Test Human</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Analysis Benchmark Box -->
+              <div id="vn-result-box" style="display: none; background: var(--pill-inactive-bg); border-radius: 14px; padding: 12px; border: 1px solid var(--panel-border);">
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
+                  <span style="font-size: 11.5px; color: var(--muted);" id="vn-analyzing-file-name">Voice_Note.ogg</span>
+                  <span id="vn-result-badge" class="status-pill neutral"></span>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 11.5px;">
+                  <div style="background: var(--pill-inactive-bg); padding: 6px 10px; border-radius: 8px;">
+                    <span style="color: var(--muted); display: block;">Inference Time &amp; DSP:</span>
+                    <span style="font-weight: 600;" id="vn-inference-time">164 ms &bull; 44.1kHz</span>
+                  </div>
+                  <div style="background: var(--pill-inactive-bg); padding: 6px 10px; border-radius: 8px;">
+                    <span style="color: var(--muted); display: block;">High-Freq Artifacts:</span>
+                    <span style="font-weight: 600;" id="vn-harmonic-stat">Checking...</span>
+                  </div>
+                  <div style="background: var(--pill-inactive-bg); padding: 6px 10px; border-radius: 8px;">
+                    <span style="color: var(--muted); display: block;">Pitch Jitter (F0 Perturbation):</span>
+                    <span style="font-weight: 600;" id="vn-jitter-stat">--</span>
+                  </div>
+                  <div style="background: var(--pill-inactive-bg); padding: 6px 10px; border-radius: 8px;">
+                    <span style="color: var(--muted); display: block;">Acoustic Diagnosis:</span>
+                    <span style="font-weight: 600;" id="vn-diagnosis-stat">--</span>
+                  </div>
+                </div>
+                <div id="vn-verdict-explanation" style="margin-top: 8px; font-size: 11px; color: var(--subtext); line-height: 1.45; padding-top: 8px; border-top: 1px solid var(--panel-border);"></div>
+              </div>
+            </div>
+
+            
+            <!-- TAB: VOICE CLONE -->
+            <div class="dash-tab-pane" id="tab-voiceclone">
+              <div class="saas-main-header" style="padding:0; margin-bottom: 24px;">
+                <div>
+                  <h2 class="saas-page-title" style="font-size: 16px;">Voice Cloning & Modulation</h2>
+                  <p class="saas-page-subtitle">Simulate real-time AI voice changing (Deep Voice, Synthetic, Masking).</p>
+                </div>
+              </div>
+
+              <div style="display: flex; flex-direction: column; gap: 20px;">
+                <!-- Audio Input Selection -->
+                <div class="acoustic-metric-card" style="padding: 16px;">
+                  <div style="font-size: 13px; font-weight: 600; margin-bottom: 12px;">Pilih Sumber Suara</div>
+                  <div style="display: flex; gap: 10px;">
+                    <button class="action-pill-btn" id="vc-btn-mic" style="flex: 1; justify-content: center; height: 40px;">
+                      <i class="fa-solid fa-microphone"></i> Live Mic
+                    </button>
+                    <button class="action-pill-btn" id="vc-btn-file" style="flex: 1; justify-content: center; height: 40px; background: transparent; border: 1px solid var(--panel-border);">
+                      <i class="fa-solid fa-file-audio"></i> Unggah Audio
+                    </button>
+                    <input type="file" id="vc-file-input" accept="audio/*" style="display: none;" />
+                  </div>
+                  <div id="vc-status-text" style="font-size: 12px; color: var(--muted); margin-top: 12px; text-align: center;">Sumber: Live Mic</div>
+                  
+                  <div id="vc-audio-player-container" style="display:none; margin-top: 12px; text-align: center;">
+                    <audio id="vc-audio-player" controls style="width: 100%; height: 35px;"></audio>
+                  </div>
+                </div>
+
+                <!-- Effect Selection -->
+                <div class="acoustic-metric-card" style="padding: 16px;">
+                  <div style="font-size: 13px; font-weight: 600; margin-bottom: 12px;">Pilih Filter Suara (Voice Morph)</div>
+                  
+                  <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">
+                    <button class="preset-pill vc-preset-btn active" data-effect="deep" style="justify-content: center; padding: 12px 8px;">
+                      <i class="fa-solid fa-user-secret" style="margin-bottom: 4px; font-size: 16px;"></i><br/>Deep Voice
+                    </button>
+                    <button class="preset-pill vc-preset-btn" data-effect="robot" style="justify-content: center; padding: 12px 8px;">
+                      <i class="fa-solid fa-robot" style="margin-bottom: 4px; font-size: 16px;"></i><br/>Synthetic
+                    </button>
+                    <button class="preset-pill vc-preset-btn" data-effect="alien" style="justify-content: center; padding: 12px 8px;">
+                      <i class="fa-solid fa-ghost" style="margin-bottom: 4px; font-size: 16px;"></i><br/>Chipmunk
+                    </button>
+                  </div>
+                  
+                  <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 10px;">
+                    <button class="preset-pill vc-preset-btn" data-effect="radio" style="justify-content: center; padding: 12px 8px;">
+                      <i class="fa-solid fa-walkie-talkie" style="margin-bottom: 4px; font-size: 16px;"></i><br/>Walkie Talkie
+                    </button>
+                    <button class="preset-pill vc-preset-btn" data-effect="echo" style="justify-content: center; padding: 12px 8px;">
+                      <i class="fa-solid fa-mountain" style="margin-bottom: 4px; font-size: 16px;"></i><br/>Cave Echo
+                    </button>
+                  </div>
+                </div>
+                
+                <div class="acoustic-metric-card" style="padding: 16px; background: rgba(59, 130, 246, 0.05); border-color: rgba(59, 130, 246, 0.2);">
+                   <div style="display: flex; align-items: center; gap: 10px;">
+                      <i class="fa-solid fa-circle-info" style="color: var(--text);"></i>
+                      <div style="font-size: 11px; color: var(--text); line-height: 1.5;">Gunakan headphone (earphone) untuk menghindari feedback audio yang menyakitkan telinga saat menggunakan mode Live Mic.</div>
+                   </div>
+                </div>
+
+                <button class="action-pill-btn" id="btn-toggle-vc" style="height: 44px; width: 100%; justify-content: center; font-size: 14px; background: var(--text); color: var(--bg);">
+                  <i class="fa-solid fa-play"></i>
+                  <span id="btn-toggle-vc-text">Mulai Voice Clone</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- TAB 3: FAMILY SAFE WORD VAULT -->
+            <div class="dash-tab-pane" id="tab-safeword">
+
+              <!-- 3 Step Protocol -->
+              <div style="display: flex; flex-direction: column; gap: 8px;">
+                <div class="protocol-step">
+                  <div class="protocol-num" style="background: var(--text);">1</div>
+                  <div>
+                    <div style="font-weight: 600; font-size: 12.5px;">Akhiri Panggilan Segera (End Call)</div>
+                    <div style="color: var(--muted); font-size: 11px;">Jangan pernah mentransfer uang atau membagikan OTP saat dalam panggilan terindikasi.</div>
+                  </div>
+                </div>
+                <div class="protocol-step">
+                  <div class="protocol-num" style="background: var(--text);">2</div>
+                  <div>
+                    <div style="font-weight: 600; font-size: 12.5px;">Tanyakan "Safe Word" Keluarga</div>
+                    <div style="color: var(--muted); font-size: 11px;">Gunakan kata sandi rahasia keluarga yang hanya diketahui kerabat dekat Anda.</div>
+                  </div>
+                </div>
+                <div class="protocol-step">
+                  <div class="protocol-num" style="background: var(--text);">3</div>
+                  <div>
+                    <div style="font-weight: 600; font-size: 12.5px;">Verifikasi Ulang Jalur Seluler (GSM)</div>
+                    <div style="color: var(--muted); font-size: 11px;">Hubungi kembali nomor kontak asli kerabat Anda via panggilan GSM biasa.</div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Interactive Safe Word Tester -->
+              <div style="background: var(--pill-inactive-bg); padding: 12px; border-radius: 14px; border: 1px solid var(--panel-border);">
+                <div style="font-size: 12px; font-weight: 600; margin-bottom: 6px; display: flex; align-items: center; justify-content: space-between;">
+                  <span style="display: flex; align-items: center; gap: 6px;">
+                    <i class="fa-solid fa-key" style=""></i>
+                    <span>Verifikasi Safe Word Keluarga Aktif</span>
+                  </span>
+                  <span class="status-pill safe" style="font-size: 10px; padding: 2px 8px;">Vault: Garuda2026</span>
+                </div>
+                <div style="display: flex; gap: 8px;">
+                  <input type="text" id="input-safeword" placeholder="Ketik Safe Word (contoh: Garuda2026)" style="flex: 1; height: 36px; background: var(--pill-inactive-bg); border: 1px solid var(--panel-border); border-radius: 8px; padding: 0 10px; color: var(--text); font-size: 12px;" />
+                  <button id="btn-verify-safeword" class="action-pill-btn" style="height: 36px; padding: 0 14px; font-size: 12px;">Verifikasi</button>
+                </div>
+                <div id="safeword-result" style="font-size: 11.5px; margin-top: 6px; display: none;"></div>
+              </div>
+            </div>
+
+            <!-- TAB 4: FORENSIC TELEMETRY LOGS -->
+            <div class="dash-tab-pane" id="tab-logs">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                <span style="font-size: 12px; font-weight: 600; color: var(--muted);">Recent Threat &amp; Acoustic Audits (Volatile Session)</span>
+                <button class="action-pill-btn-sm" id="btn-export-logs" style="font-size: 11px;">
+                  <i class="fa-solid fa-download"></i>
+                  <span>Export JSON</span>
+                </button>
+              </div>
+              <div class="logs-table-container">
+                <table class="saas-logs-table">
+                  <thead>
+                    <tr>
+                      <th>Time</th>
+                      <th>Audio Source</th>
+                      <th>Inference</th>
+                      <th>Confidence</th>
+                      <th>Classification</th>
+                    </tr>
+                  </thead>
+                  <tbody id="logs-table-body">
+                    <tr>
+                      <td>06:27:14</td>
+                      <td>Live Call #4092</td>
+                      <td>164ms</td>
+                      <td>96.4%</td>
+                      <td><span class="status-pill danger" style="padding: 2px 8px; font-size: 10px;">AI CLONE (RVC)</span></td>
+                    </tr>
+                    <tr>
+                      <td>06:24:02</td>
+                      <td>WhatsApp .OGG</td>
+                      <td>142ms</td>
+                      <td>98.8%</td>
+                      <td><span class="status-pill safe" style="padding: 2px 8px; font-size: 10px;">AUTHENTIC HUMAN</span></td>
+                    </tr>
+                    <tr>
+                      <td>06:18:49</td>
+                      <td>GSM Weak Stream</td>
+                      <td>178ms</td>
+                      <td>55.0%</td>
+                      <td><span class="status-pill warn" style="padding: 2px 8px; font-size: 10px;">LOW SNR / NOISY</span></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- TAB 5: API & WEBHOOKS -->
+            <div class="dash-tab-pane" id="tab-api">
+              <div class="api-token-box">
+                <div style="font-size: 11.5px; font-weight: 600; color: var(--muted); margin-bottom: 4px;">Production API Key (Bearer Token)</div>
+                <div class="token-input-row">
+                  <input type="text" readonly value="nv_live_89f3a9e219cb44a180dce77" id="api-key-input" class="token-input" />
+                  <button class="btn-copy-token" id="btn-copy-token">
+                    <i class="fa-solid fa-copy"></i>
+                    <span>Salin</span>
+                  </button>
+                </div>
+              </div>
+
+              <div style="background: var(--pill-inactive-bg); padding: 10px 12px; border-radius: 12px; border: 1px solid var(--panel-border); font-family: monospace; font-size: 11px; line-height: 1.45; overflow-x: auto;">
+                <div style="color: var(--muted);"># Quickstart REST Scan Example:</div>
+                <div style="color: var(--text);">curl -X POST https://api.navoice.ai/v1/scan \</div>
+                <div style="color: var(--text);">&nbsp;&nbsp;-H "Authorization: Bearer nv_live_..." \</div>
+                <div style="color: var(--text);">&nbsp;&nbsp;-F "audio=@voicenote.ogg"</div>
+              </div>
+            </div>
+
+              </div>
+            </main>
           </div>
         </section>
 
@@ -536,7 +963,7 @@
             <span class="stat-value" data-target="24" data-decimals="0" data-duration="1660" data-delay="660">0</span>
             <span class="stat-suffix">/7</span>
           </div>
-          <span class="stat-label">Live Speaker Scan Mode</span>
+          <span class="stat-label">Live Scanner Mode</span>
         </div>
 
         <!-- Stat 4 -->
@@ -550,6 +977,88 @@
         </div>
       </footer>
     </main>
+
+    <!-- SAAS AUTHENTICATION MODAL DIALOG -->
+    <div class="auth-modal-overlay" id="auth-modal-overlay" aria-hidden="true">
+      <div class="auth-modal-card" id="auth-modal-card">
+        <!-- Close Button -->
+        <button class="auth-modal-close" id="btn-close-auth-modal" aria-label="Tutup Dialog Login">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+
+        <!-- Auth Header -->
+        <div class="auth-modal-header">
+          <div class="auth-logo-badge">
+            <i class="fa-solid fa-shield-halved" style="font-size: 20px;"></i>
+          </div>
+          <h3 class="auth-modal-title">Masuk ke Navoice Cloud</h3>
+          <p class="auth-modal-subtitle">Buka akses penuh ke Live Scanner, Analisis Pesan Suara, dan Family Safe Words.</p>
+        </div>
+
+        <!-- 1-Click Instant Demo Login CTA -->
+        <button class="auth-instant-demo-btn" id="btn-instant-demo-login">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <i class="fa-solid fa-bolt" style="font-size: 15px;"></i>
+            <div style="text-align: left;">
+              <div style="font-size: 13px; font-weight: 700; color: #ffffff;">⚡ Akses Instan Akun Demo</div>
+              <div style="font-size: 11px; opacity: 0.85;">Alex Mercer &bull; Pro Plan Plan Aktif</div>
+            </div>
+          </div>
+          <i class="fa-solid fa-arrow-right" style="font-size: 12px; "></i>
+        </button>
+
+        <div class="auth-divider">
+          <span>atau masuk dengan akun Anda</span>
+        </div>
+
+        <!-- Auth Form -->
+        <form class="auth-form" id="saas-auth-form">
+          <div class="auth-field-group">
+            <label for="auth-email-input" class="auth-label">Email Kerja / Pribadi</label>
+            <div class="auth-input-wrapper">
+              <i class="fa-solid fa-envelope auth-input-icon"></i>
+              <input type="email" id="auth-email-input" class="auth-input" placeholder="nama@perusahaan.com" required value="alex.mercer@navoice.ai" />
+            </div>
+          </div>
+
+          <div class="auth-field-group">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+              <label for="auth-password-input" class="auth-label">Password</label>
+              <a href="#" class="auth-forgot-link" id="btn-forgot-password">Lupa password?</a>
+            </div>
+            <div class="auth-input-wrapper">
+              <i class="fa-solid fa-lock auth-input-icon"></i>
+              <input type="password" id="auth-password-input" class="auth-input" placeholder="••••••••••••" required value="SecureSentinel2026!" />
+            </div>
+          </div>
+
+          <button type="submit" class="auth-submit-btn" id="btn-submit-auth">
+            <span>Masuk ke Dashboard</span>
+            <i class="fa-solid fa-arrow-right-to-bracket"></i>
+          </button>
+        </form>
+
+        <!-- Social OAuth Options -->
+        <div class="auth-social-row">
+          <button class="auth-social-btn" id="btn-oauth-google" title="Masuk dengan Google">
+            <i class="fa-brands fa-google"></i>
+            <span>Google</span>
+          </button>
+          <button class="auth-social-btn" id="btn-oauth-apple" title="Masuk dengan Apple">
+            <i class="fa-brands fa-apple"></i>
+            <span>Apple</span>
+          </button>
+          <button class="auth-social-btn" id="btn-oauth-microsoft" title="Masuk dengan Microsoft">
+            <i class="fa-brands fa-windows"></i>
+            <span>Microsoft</span>
+          </button>
+        </div>
+
+        <div class="auth-footer-terms">
+          Dilindungi oleh Ephemeral Buffer &bull; <span style="color: var(--text);">ISO 27001 &bull; GDPR Compliant</span>
+        </div>
+      </div>
+    </div>
 
     <!-- Main JavaScript module -->
     <script type="module" src="./main.js"></script>

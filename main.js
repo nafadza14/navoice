@@ -5,22 +5,361 @@
 
 document.addEventListener("DOMContentLoaded", () => {
   initThemeEngine();
+  initAuthSystem();
+  initDashboardTabs();
   initNavigationViews();
   initStatsCountUp();
   initMobileMenu();
   initSpeakerScanEngine();
   initVoiceNoteExtension();
+  initVoiceCloneEngine();
   initEmergencyProtocol();
 });
 
 /* =========================================================================
-   1. THEME ENGINE (NIGHT / DARK MODE & LIGHT MODE)
+   1. SAAS AUTHENTICATION & ACCESS GATING SYSTEM
+   ========================================================================= */
+let isUserLoggedIn = false;
+let inMemoryAuth = false;
+let inMemoryEmail = "alex.mercer@navoice.ai";
+let inMemoryName = "Alex Mercer";
+
+function isUserAuthenticated() {
+  try {
+    return localStorage.getItem("navoice_auth_token") === "true";
+  } catch(e) {
+    return inMemoryAuth;
+  }
+}
+
+function showToast(message, icon = "fa-shield-halved") {
+  let toast = document.querySelector(".gated-toast");
+  if (!toast) {
+    toast = document.createElement("div");
+    toast.className = "gated-toast";
+    document.body.appendChild(toast);
+  }
+  toast.innerHTML = `<i class="fa-solid ${icon}"></i><span style="margin-left:8px;">${message}</span>`;
+  toast.classList.add("show");
+  setTimeout(() => {
+    toast.classList.remove("show");
+  }, 3500);
+}
+
+function openAuthModal(reasonText) {
+  const modalOverlay = document.getElementById("auth-modal-overlay");
+  if (modalOverlay) {
+    modalOverlay.classList.add("active");
+    modalOverlay.setAttribute("aria-hidden", "false");
+    if (reasonText) {
+      showToast(reasonText, "fa-lock");
+    }
+  }
+}
+
+function closeAuthModal() {
+  const modalOverlay = document.getElementById("auth-modal-overlay");
+  if (modalOverlay) {
+    modalOverlay.classList.remove("active");
+    modalOverlay.setAttribute("aria-hidden", "true");
+  }
+}
+
+function loginUser(email = "alex.mercer@navoice.ai", name = "Alex Mercer") {
+  try {
+    localStorage.setItem("navoice_auth_token", "true");
+    localStorage.setItem("navoice_user_email", email);
+    localStorage.setItem("navoice_user_name", name);
+  } catch(e) {
+    inMemoryAuth = true;
+    inMemoryEmail = email;
+    inMemoryName = name;
+  }
+  isUserLoggedIn = true;
+
+  updateAuthUIState();
+  closeAuthModal();
+  showToast(`Selamat datang, ${name}! Akses Dashboard aktif.`, "fa-circle-check");
+  
+  // Switch to Dashboard
+  switchView("view-dashboard");
+}
+
+function logoutUser() {
+  try {
+    localStorage.removeItem("navoice_auth_token");
+    localStorage.removeItem("navoice_user_email");
+    localStorage.removeItem("navoice_user_name");
+  } catch(e) {
+    inMemoryAuth = false;
+  }
+  isUserLoggedIn = false;
+
+  updateAuthUIState();
+  showToast("Anda telah keluar dari Navoice Cloud Dashboard.", "fa-arrow-right-from-bracket");
+  switchView("view-home");
+}
+
+function updateAuthUIState() {
+  const isAuth = isUserAuthenticated();
+  isUserLoggedIn = isAuth;
+
+  const headerAuthText = document.getElementById("header-auth-text");
+  const headerAuthIcon = document.getElementById("header-auth-icon");
+  const mobileAuthBtnText = document.getElementById("mobile-auth-btn-text");
+  const navDashboard = document.getElementById("nav-dashboard");
+  const mobileNavDashboard = document.getElementById("mobile-nav-dashboard");
+  
+  const userDisplayEmail = document.getElementById("user-display-email");
+  const userDisplayName = document.getElementById("user-display-name");
+  const userAvatar = document.getElementById("user-avatar-initials");
+
+  let email, name;
+  try {
+    email = localStorage.getItem("navoice_user_email") || "alex.mercer@navoice.ai";
+    name = localStorage.getItem("navoice_user_name") || "Alex Mercer";
+  } catch(e) {
+    email = inMemoryEmail;
+    name = inMemoryName;
+  }
+  const initials = name.split(" ").map(w => w[0]).join("").slice(0, 2).toUpperCase() || "AM";
+
+  if (isAuth) {
+    if (headerAuthText) headerAuthText.textContent = "Dashboard";
+    if (headerAuthIcon) {
+      headerAuthIcon.className = "fa-solid fa-gauge-high";
+      headerAuthIcon.style.color = "inherit";
+    }
+    if (mobileAuthBtnText) mobileAuthBtnText.textContent = "Open Live Dashboard";
+    if (navDashboard) navDashboard.style.display = "inline-flex";
+    if (mobileNavDashboard) mobileNavDashboard.style.display = "flex";
+    
+    if (userDisplayEmail) userDisplayEmail.textContent = email;
+    if (userDisplayName) userDisplayName.textContent = name;
+    if (userAvatar) userAvatar.textContent = initials;
+  } else {
+    if (headerAuthText) headerAuthText.textContent = "Sign In";
+    if (headerAuthIcon) {
+      headerAuthIcon.className = "fa-solid fa-arrow-right-to-bracket";
+      headerAuthIcon.style.color = "inherit";
+    }
+    if (mobileAuthBtnText) mobileAuthBtnText.textContent = "Sign In to Dashboard";
+    if (navDashboard) navDashboard.style.display = "none";
+    if (mobileNavDashboard) mobileNavDashboard.style.display = "none";
+
+    if (userDisplayEmail) userDisplayEmail.textContent = "guest@navoice.ai";
+    if (userDisplayName) userDisplayName.textContent = "Guest User";
+    if (userAvatar) userAvatar.textContent = "GU";
+  }
+}
+
+function initAuthSystem() {
+  updateAuthUIState();
+
+  // Header Login / Dashboard button
+  const headerAuthBtn = document.getElementById("header-auth-btn");
+  if (headerAuthBtn) {
+    headerAuthBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      if (isUserAuthenticated()) {
+        switchView("view-dashboard");
+      } else {
+        openAuthModal("Silakan masuk atau gunakan Akun Demo untuk mengakses Dashboard.");
+      }
+    });
+  }
+
+  // Mobile Auth Action Button
+  const mobileAuthBtn = document.getElementById("mobile-auth-action-btn");
+  if (mobileAuthBtn) {
+    mobileAuthBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      const burgerBtn = document.getElementById("burger-button");
+      const overlay = document.getElementById("mobile-overlay");
+      const menuSheet = document.getElementById("mobile-menu-sheet");
+      if (burgerBtn && menuSheet && overlay) {
+        burgerBtn.classList.remove("active");
+        menuSheet.classList.remove("open");
+        overlay.classList.remove("active");
+      }
+
+      if (isUserAuthenticated()) {
+        switchView("view-dashboard");
+      } else {
+        openAuthModal("Buka akses Dashboard penuh dengan Akun Demo instan.");
+      }
+    });
+  }
+
+  // Hero Get Started Button (main-cta-button)
+  const mainCtaBtn = document.getElementById("main-cta-button");
+  if (mainCtaBtn) {
+    mainCtaBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      if (isUserAuthenticated()) {
+        switchView("view-dashboard");
+      } else {
+        openAuthModal("Buka akses Dashboard penuh dengan Akun Demo instan.");
+      }
+    });
+  }
+
+  // Feature, Solution, Pricing, Specs CTAs -> Dashboard
+  [
+    "btn-features-try-dashboard",
+    "btn-solutions-get-started",
+    "btn-pricing-free",
+    "btn-pricing-pro",
+    "btn-pricing-enterprise",
+    "btn-specs-open-dashboard"
+  ].forEach((id) => {
+    const btn = document.getElementById(id);
+    if (btn) {
+      btn.addEventListener("click", (e) => {
+        e.preventDefault();
+        if (isUserAuthenticated()) {
+          switchView("view-dashboard");
+        } else {
+          openAuthModal("Silakan masuk untuk mengaktifkan fitur Sentinel.");
+        }
+      });
+    }
+  });
+
+  // Close modal button
+  const closeBtn = document.getElementById("btn-close-auth-modal");
+  if (closeBtn) closeBtn.addEventListener("click", closeAuthModal);
+
+  // Overlay background click to close
+  const overlay = document.getElementById("auth-modal-overlay");
+  if (overlay) {
+    overlay.addEventListener("click", (e) => {
+      if (e.target === overlay) closeAuthModal();
+    });
+  }
+
+  // 1-Click Instant Demo Login button
+  const instantDemoBtn = document.getElementById("btn-instant-demo-login");
+  if (instantDemoBtn) {
+    instantDemoBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      loginUser("alex.mercer@navoice.ai", "Alex Mercer");
+    });
+  }
+
+  // Auth Form submission
+  const authForm = document.getElementById("saas-auth-form");
+  if (authForm) {
+    authForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const emailInput = document.getElementById("auth-email-input");
+      const email = emailInput && emailInput.value.trim() ? emailInput.value.trim() : "alex.mercer@navoice.ai";
+      const name = email.split("@")[0].replace(/[._]/g, " ").replace(/\b\w/g, l => l.toUpperCase());
+      loginUser(email, name || "Enterprise Member");
+    });
+  }
+
+  // Social OAuth fast buttons
+  ["btn-oauth-google", "btn-oauth-apple", "btn-oauth-microsoft"].forEach((id) => {
+    const btn = document.getElementById(id);
+    if (btn) {
+      btn.addEventListener("click", (e) => {
+        e.preventDefault();
+        const provider = id.replace("btn-oauth-", "").toUpperCase();
+        loginUser(`member_${provider.toLowerCase()}@navoice.ai`, `${provider} User`);
+      });
+    }
+  });
+
+  // Dashboard Logout button
+  const logoutBtn = document.getElementById("btn-dashboard-logout");
+  if (logoutBtn) {
+    logoutBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      logoutUser();
+    });
+  }
+}
+
+/* =========================================================================
+   2. DASHBOARD SUB-TAB SYSTEM & UTILITIES
+   ========================================================================= */
+function initDashboardTabs() {
+  const tabButtons = document.querySelectorAll("#dashboard-tabs .dash-tab-btn");
+  const tabPanes = document.querySelectorAll(".dash-tab-pane");
+
+  function switchDashTab(tabId) {
+    tabButtons.forEach(btn => {
+      btn.classList.toggle("active", btn.getAttribute("data-tab") === tabId);
+    });
+    tabPanes.forEach(pane => {
+      pane.classList.toggle("active", pane.id === tabId);
+    });
+
+    if (tabId === "tab-scanner") {
+      window.dispatchEvent(new Event("resize"));
+    }
+  }
+
+  tabButtons.forEach(btn => {
+    btn.addEventListener("click", () => {
+      const tabId = btn.getAttribute("data-tab");
+      if (tabId) switchDashTab(tabId);
+    });
+  });
+
+  // Tab switch shortcuts (e.g., jump to safeword tab)
+  document.querySelectorAll("[data-tab-switch]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const target = btn.getAttribute("data-tab-switch");
+      if (target) switchDashTab(target);
+    });
+  });
+
+  // Copy API Key button
+  const btnCopyToken = document.getElementById("btn-copy-token");
+  const apiKeyInput = document.getElementById("api-key-input");
+  if (btnCopyToken && apiKeyInput) {
+    btnCopyToken.addEventListener("click", () => {
+      navigator.clipboard.writeText(apiKeyInput.value).then(() => {
+        const originalHtml = btnCopyToken.innerHTML;
+        btnCopyToken.innerHTML = '<i class="fa-solid fa-check" style=""></i><span>Tersalin!</span>';
+        showToast("API Key tersalin ke clipboard.", "fa-key");
+        setTimeout(() => {
+          btnCopyToken.innerHTML = originalHtml;
+        }, 2000);
+      });
+    });
+  }
+
+  // Export JSON Logs button
+  const btnExportLogs = document.getElementById("btn-export-logs");
+  if (btnExportLogs) {
+    btnExportLogs.addEventListener("click", () => {
+      const logsData = [
+        { id: "LOG-4092", timestamp: new Date().toISOString(), type: "Live Call", durationMs: 3400, inferenceMs: 164, aiProbability: 0.964, classification: "AI_CLONE_RVC", details: "Vocoder >16kHz artifacts detected" },
+        { id: "LOG-4091", timestamp: new Date(Date.now() - 180000).toISOString(), type: "WhatsApp Voice Note", durationMs: 8000, inferenceMs: 142, aiProbability: 0.012, classification: "AUTHENTIC_HUMAN", details: "Natural vocal micro-tremor 1.38% jitter" },
+        { id: "LOG-4090", timestamp: new Date(Date.now() - 480000).toISOString(), type: "GSM Weak Stream", durationMs: 5100, inferenceMs: 178, aiProbability: 0.450, classification: "LOW_SNR_NOISY", details: "Weak cellular carrier SNR" }
+      ];
+
+      const blob = new Blob([JSON.stringify(logsData, null, 2)], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `navoice_forensic_logs_${Date.now()}.json`;
+      a.click();
+      URL.revokeObjectURL(url);
+      showToast("Forensic Telemetry Logs berhasil diunduh.", "fa-file-arrow-down");
+    });
+  }
+}
+
+/* =========================================================================
+   3. THEME ENGINE (NIGHT / DARK MODE & LIGHT MODE)
    ========================================================================= */
 function initThemeEngine() {
   const themeToggleBtn = document.getElementById("theme-toggle-btn");
   const mobileThemeBtn = document.getElementById("mobile-theme-btn");
-  const themeIcon = document.getElementById("theme-toggle-icon");
-  const themeText = document.getElementById("theme-toggle-text");
 
   // Default theme is dark / night mode
   const savedTheme = localStorage.getItem("navoice_theme") || "dark";
@@ -31,17 +370,27 @@ function initThemeEngine() {
     localStorage.setItem("navoice_theme", theme);
 
     const isLight = theme === "light";
-    if (themeIcon) {
-      themeIcon.className = isLight ? "fa-solid fa-moon" : "fa-solid fa-sun";
+    const currentThemeIcon = document.getElementById("theme-toggle-icon");
+    if (currentThemeIcon) {
+      if (isLight) {
+        currentThemeIcon.className = "fa-solid fa-moon";
+        currentThemeIcon.style.color = "inherit";
+      } else {
+        currentThemeIcon.className = "fa-solid fa-sun";
+        currentThemeIcon.style.color = "inherit";
+      }
     }
-    if (themeText) {
-      themeText.textContent = isLight ? "Night Mode" : "Light Mode";
-    }
+
     if (mobileThemeBtn) {
-      const icon = mobileThemeBtn.querySelector("i");
-      const label = mobileThemeBtn.querySelector("span");
-      if (icon) icon.className = isLight ? "fa-solid fa-moon" : "fa-solid fa-sun";
-      if (label) label.textContent = isLight ? "Switch to Night Mode" : "Switch to Light Mode";
+      const icon = mobileThemeBtn.querySelector(".mobile-theme-icon-i");
+      const label = document.getElementById("mobile-theme-label");
+      if (icon) {
+        icon.className = isLight ? "fa-solid fa-moon mobile-theme-icon-i" : "fa-solid fa-sun mobile-theme-icon-i";
+        icon.style.color = "inherit";
+      }
+      if (label) {
+        label.textContent = isLight ? "Switch to Night Mode" : "Switch to Light Mode";
+      }
     }
 
     // Trigger canvas redraw for current theme
@@ -65,6 +414,13 @@ let activeViewId = "view-home";
 
 function switchView(viewId) {
   if (!viewId) return;
+
+  // GATING CHECK: All dashboard and scanning features require authentication
+  if (viewId === "view-dashboard" && !isUserAuthenticated()) {
+    openAuthModal("Silakan masuk atau gunakan Akun Demo untuk mengakses Dashboard & Fitur Live Scanner.");
+    return;
+  }
+
   const targetView = document.getElementById(viewId);
   if (!targetView) return;
 
@@ -77,6 +433,48 @@ function switchView(viewId) {
 
   // Activate target view
   targetView.classList.add("active");
+
+  // Show/Hide Landing Header and Footer
+  const mainHeader = document.getElementById("main-header");
+  const mainStatsFooter = document.getElementById("main-stats-footer");
+  const mainPage = document.getElementById("main-page");
+  const viewsContainer = document.getElementById("views-container");
+  
+  if (viewId === "view-dashboard") {
+    if (mainHeader) mainHeader.style.display = "none";
+    if (mainStatsFooter) mainStatsFooter.style.display = "none";
+    
+    // Also adjust main layout padding
+    if (mainPage) {
+      mainPage.style.padding = "0";
+      mainPage.style.height = "100vh";
+      mainPage.style.maxWidth = "100%";
+      mainPage.style.overflow = "hidden";
+    }
+    if (viewsContainer) {
+      viewsContainer.style.maxWidth = "100%";
+      viewsContainer.style.margin = "0";
+      viewsContainer.style.height = "100%";
+      viewsContainer.style.flex = "1";
+    }
+    
+  } else {
+    if (mainHeader) mainHeader.style.display = "";
+    if (mainStatsFooter) mainStatsFooter.style.display = "";
+    
+    if (mainPage) {
+      mainPage.style.padding = "";
+      mainPage.style.height = "";
+      mainPage.style.maxWidth = "";
+      mainPage.style.overflow = "";
+    }
+    if (viewsContainer) {
+      viewsContainer.style.maxWidth = "";
+      viewsContainer.style.margin = "";
+      viewsContainer.style.height = "";
+      viewsContainer.style.flex = "";
+    }
+  }
 
   // Sync desktop nav links
   const desktopNavLinks = document.querySelectorAll("#desktop-nav .nav-link");
@@ -115,6 +513,13 @@ function initNavigationViews() {
 
   // Logo button returns to home
   const logoBtn = document.getElementById("logo-button");
+  const dashLogoBtn = document.getElementById("dash-logo-button");
+  if (dashLogoBtn) {
+    dashLogoBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      switchView("view-home");
+    });
+  }
   if (logoBtn) {
     logoBtn.addEventListener("click", (e) => {
       e.preventDefault();
@@ -223,19 +628,46 @@ function initMobileMenu() {
  * DSP Feature Extraction Utilities for AI Voice vs Human Classification
  */
 const DSP = {
-  // Compute Root Mean Square (RMS) volume
+  // Safe helper to extract time domain data across all mobile browsers
+  getTimeDomainData(analyser, targetFloatArray) {
+    if (typeof analyser.getFloatTimeDomainData === "function") {
+      analyser.getFloatTimeDomainData(targetFloatArray);
+    } else {
+      const byteData = new Uint8Array(analyser.fftSize);
+      analyser.getByteTimeDomainData(byteData);
+      for (let i = 0; i < byteData.length; i++) {
+        targetFloatArray[i] = (byteData[i] - 128) / 128;
+      }
+    }
+  },
+
+  // Safe helper to extract frequency data across all mobile browsers
+  getFrequencyData(analyser, targetFloatArray, targetByteArray) {
+    if (typeof analyser.getFloatFrequencyData === "function") {
+      analyser.getFloatFrequencyData(targetFloatArray);
+    } else {
+      const byteData = targetByteArray || new Uint8Array(analyser.frequencyBinCount);
+      analyser.getByteFrequencyData(byteData);
+      for (let i = 0; i < byteData.length; i++) {
+        targetFloatArray[i] = (byteData[i] / 255) * 70 - 100;
+      }
+    }
+  },
+
+  // Compute Root Mean Square (RMS) volume with high sensitivity for mobile mics
   calculateRMS(timeBuffer) {
     let sum = 0;
-    for (let i = 0; i < timeBuffer.length; i++) {
+    const len = timeBuffer.length;
+    for (let i = 0; i < len; i++) {
       sum += timeBuffer[i] * timeBuffer[i];
     }
-    return Math.sqrt(sum / timeBuffer.length);
+    return Math.sqrt(sum / len);
   },
 
   // Autocorrelation pitch extraction (F0 in Hz)
   estimatePitch(timeBuffer, sampleRate) {
-    const minPeriod = Math.floor(sampleRate / 450); // ~450 Hz max (high female/child)
-    const maxPeriod = Math.floor(sampleRate / 65);  // ~65 Hz min (deep male)
+    const minPeriod = Math.floor(sampleRate / 480); // ~480 Hz max (high female/child)
+    const maxPeriod = Math.floor(sampleRate / 60);  // ~60 Hz min (deep male)
     
     let maxCorr = -1;
     let bestPeriod = -1;
@@ -264,7 +696,7 @@ const DSP = {
       }
     }
 
-    if (maxCorr > 0.42 && bestPeriod > 0) {
+    if (maxCorr > 0.38 && bestPeriod > 0) {
       return { pitch: sampleRate / bestPeriod, strength: maxCorr };
     }
     return { pitch: 0, strength: 0 };
@@ -272,18 +704,18 @@ const DSP = {
 
   // Calculate Pitch Jitter percentage from pitch history
   calculateJitter(pitchList) {
-    if (pitchList.length < 4) return 1.2;
+    if (pitchList.length < 3) return 1.2;
     let diffSum = 0;
     let mean = 0;
     let count = 0;
 
     for (let i = 0; i < pitchList.length; i++) {
-      if (pitchList[i] > 60 && pitchList[i] < 450) {
+      if (pitchList[i] > 60 && pitchList[i] < 480) {
         mean += pitchList[i];
         count++;
       }
     }
-    if (count < 4) return 1.2;
+    if (count < 3) return 1.2;
     mean /= count;
 
     let validDiffs = 0;
@@ -313,15 +745,15 @@ const DSP = {
     for (let i = 0; i < binCount; i++) {
       const hz = i * binHz;
       const db = freqFloatBuffer[i];
-      const linear = Math.pow(10, db / 20);
+      const linear = Math.pow(10, Math.max(-100, Math.min(0, db)) / 20);
 
-      if (hz >= 200 && hz < 3500) {
+      if (hz >= 200 && hz < 3800) {
         sumLow += linear;
-      } else if (hz >= 7500 && hz < 16000) {
+      } else if (hz >= 7500 && hz < 16500) {
         sumHigh += linear;
       }
 
-      if (linear > 0.0001) {
+      if (linear > 0.00005) {
         geoSum += Math.log(linear);
         arithSum += linear;
         activeBins++;
@@ -329,14 +761,14 @@ const DSP = {
     }
 
     let flatness = 0.15;
-    if (activeBins > 8 && arithSum > 0) {
+    if (activeBins > 6 && arithSum > 0) {
       const geoMean = Math.exp(geoSum / activeBins);
       const arithMean = arithSum / activeBins;
       flatness = Math.min(1, Math.max(0.01, geoMean / arithMean));
     }
 
     const hfRatio = (sumHigh / (sumLow + 1e-6));
-    const hfCutoffDetected = (sumHigh < (sumLow * 0.006) && sumLow > 0.02);
+    const hfCutoffDetected = (sumHigh < (sumLow * 0.005) && sumLow > 0.015);
 
     return {
       flatness,
@@ -380,7 +812,53 @@ function initSpeakerScanEngine() {
   const pitchHistory = [];
   const timeDataFloat = new Float32Array(2048);
   const freqDataFloat = new Float32Array(1024);
-  const freqByteData = new Uint8Array(64);
+  const freqByteData = new Uint8Array(1024);
+
+  // Helper for mobile-compatible microphone acquisition
+  async function getMobileMicrophoneStream() {
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+      const legacy =
+        navigator.getUserMedia ||
+        navigator.webkitGetUserMedia ||
+        navigator.mozGetUserMedia ||
+        navigator.msGetUserMedia;
+      if (legacy) {
+        return new Promise((resolve, reject) => {
+          legacy.call(navigator, { audio: true }, resolve, reject);
+        });
+      }
+      throw new Error("Microphone API tidak didukung pada browser ini atau berada di iframe tanpa izin microphone.");
+    }
+
+    const tryConfigs = [
+      {
+        audio: {
+          echoCancellation: true,
+          noiseSuppression: false,
+          autoGainControl: true
+        }
+      },
+      {
+        audio: {
+          echoCancellation: false,
+          noiseSuppression: false,
+          autoGainControl: false
+        }
+      },
+      { audio: true }
+    ];
+
+    let lastError = null;
+    for (const config of tryConfigs) {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia(config);
+        return stream;
+      } catch (err) {
+        lastError = err;
+      }
+    }
+    throw lastError;
+  }
 
   function resizeCanvas() {
     if (!canvas) return;
@@ -406,6 +884,9 @@ function initSpeakerScanEngine() {
       btn.classList.add("active");
       activePreset = btn.getAttribute("data-preset") || "scam";
       resetScanState();
+      if (activePreset === "mic" && trustStatusText) {
+        trustStatusText.textContent = "Live Mic Ponsel siap. Klik 'Mulai Analisis Audio' untuk merekam.";
+      }
     });
   });
 
@@ -413,7 +894,7 @@ function initSpeakerScanEngine() {
     btnQuickEndCall.addEventListener("click", () => {
       stopScan();
       if (emergencyBanner) emergencyBanner.style.display = "none";
-      alert("Panggilan mencurigakan berhasil diakhiri! Data audio dihapus seketika (Zero-Storage).");
+      alert("Panggilan mencurigakan berhasil diakhiri! Data audio dihapus seketika (In-Memory Privacy).");
     });
   }
 
@@ -440,9 +921,18 @@ function initSpeakerScanEngine() {
     }
     if (emergencyBanner) emergencyBanner.style.display = "none";
 
-    if (metricJitter) metricJitter.textContent = "-- %";
-    if (metricHfAnomaly) metricHfAnomaly.textContent = "--";
-    if (metricFlatness) metricFlatness.textContent = "--";
+    if (metricJitter) {
+      metricJitter.textContent = "-- %";
+      metricJitter.style.color = "";
+    }
+    if (metricHfAnomaly) {
+      metricHfAnomaly.textContent = "--";
+      metricHfAnomaly.style.color = "";
+    }
+    if (metricFlatness) {
+      metricFlatness.textContent = "--";
+      metricFlatness.style.color = "";
+    }
   }
 
   async function startScan() {
@@ -454,58 +944,104 @@ function initSpeakerScanEngine() {
       btnToggleScan.classList.add("active-danger");
     }
 
-    if (trustStatusText) trustStatusText.textContent = "Sliding Buffer 3.5s Extracting...";
-    if (dspMetrics) dspMetrics.textContent = "DSP: Mel-Spectrogram & Pitch Tracking...";
+    if (trustStatusText) trustStatusText.textContent = "Mengaktifkan Sliding Buffer 3.5s...";
+    if (dspMetrics) dspMetrics.textContent = "DSP: Menghubungkan Audio...";
+
+    // Ensure AudioContext is created/resumed immediately within user interaction
+    try {
+      if (!audioContext || audioContext.state === "closed") {
+        audioContext = new (window.AudioContext || window.webkitAudioContext)();
+      }
+      if (audioContext && audioContext.state === "suspended") {
+        await audioContext.resume();
+      }
+    } catch (e) {
+      console.warn("AudioContext init error:", e);
+    }
 
     if (activePreset === "mic") {
       try {
-        micStream = await navigator.mediaDevices.getUserMedia({
-          audio: {
-            echoCancellation: false,
-            noiseSuppression: false,
-            autoGainControl: false
-          }
-        });
-        audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        if (trustStatusText) trustStatusText.textContent = "Meminta izin mikrofon ponsel...";
+        micStream = await getMobileMicrophoneStream();
+
+        if (!audioContext || audioContext.state === "closed") {
+          audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        if (audioContext.state === "suspended") {
+          await audioContext.resume();
+        }
+
         analyserNode = audioContext.createAnalyser();
         analyserNode.fftSize = 2048;
-        analyserNode.smoothingTimeConstant = 0.4;
+        analyserNode.smoothingTimeConstant = 0.35;
         const source = audioContext.createMediaStreamSource(micStream);
         source.connect(analyserNode);
 
         if (dspMetrics) {
           dspMetrics.textContent = `Live Mic • ${(audioContext.sampleRate / 1000).toFixed(1)}kHz • Real-Time DSP`;
         }
+        if (trustStatusText) {
+          trustStatusText.textContent = "Mic Ponsel Aktif • Silakan berbicara langsung...";
+        }
       } catch (err) {
         console.warn("Microphone access unavailable:", err);
-        if (trustStatusText) trustStatusText.textContent = "Izin mic ditolak, beralih ke simulasi";
+        if (trustStatusText) {
+          trustStatusText.textContent = "Izin mic tidak aktif / diblokir. Menggunakan simulasi live.";
+        }
+        if (dspMetrics) {
+          dspMetrics.textContent = "Live Sim Mode (Mic Fallback)";
+        }
       }
     }
 
     startVisualizer();
 
     let elapsed = 0;
+    let smoothedAiProb = 50;
     scanProgressTimer = setInterval(() => {
-      elapsed += 300;
+      if (!isScanning) return;
+      elapsed += 250;
 
       if (activePreset === "mic" && analyserNode && audioContext) {
-        analyserNode.getFloatTimeDomainData(timeDataFloat);
-        analyserNode.getFloatFrequencyData(freqDataFloat);
+        DSP.getTimeDomainData(analyserNode, timeDataFloat);
+        DSP.getFrequencyData(analyserNode, freqDataFloat, freqByteData);
 
         const rms = DSP.calculateRMS(timeDataFloat);
         
-        if (rms < 0.012) {
-          if (trustStatusText) trustStatusText.textContent = "Listening for speech... (Dekatkan suara ke mic)";
-          if (metricJitter) metricJitter.textContent = "Waiting for Voice";
-          if (metricHfAnomaly) metricHfAnomaly.textContent = "Low SNR";
-          if (metricFlatness) metricFlatness.textContent = "Noise Floor";
+        // Mobile-friendly Voice Activity Detection (VAD) threshold
+        if (rms < 0.0035) {
+          const micDbLevel = Math.max(0, Math.round(rms * 2000));
+          if (trustStatusText) trustStatusText.textContent = `Mendengarkan... (Dekatkan suara ke mic, Level: ${micDbLevel})`;
+          if (metricJitter) {
+            metricJitter.textContent = "Menunggu Vokal";
+            metricJitter.style.color = "var(--muted)";
+          }
+          if (metricHfAnomaly) {
+            metricHfAnomaly.textContent = "Noise Floor Standby";
+            metricHfAnomaly.style.color = "var(--muted)";
+          }
+          if (metricFlatness) {
+            metricFlatness.textContent = "Ambient Silence";
+            metricFlatness.style.color = "var(--muted)";
+          }
           return;
         }
 
         const { pitch, strength } = DSP.estimatePitch(timeDataFloat, audioContext.sampleRate);
-        if (pitch > 60 && strength > 0.4) {
+        let hasVocal = false;
+        if (pitch > 60 && strength > 0.35) {
+          hasVocal = true;
           pitchHistory.push(pitch);
           if (pitchHistory.length > 25) pitchHistory.shift();
+        }
+
+        // If no vocal detected and rms is low, just update metrics but freeze trust score
+        if (!hasVocal && rms < 0.02) {
+           if (metricJitter) {
+            metricJitter.textContent = "Noise (Non-Vocal)";
+            metricJitter.style.color = "var(--muted)";
+           }
+           return; // hold state
         }
 
         const jitter = DSP.calculateJitter(pitchHistory);
@@ -513,34 +1049,36 @@ function initSpeakerScanEngine() {
 
         let aiRiskScore = 0;
 
-        if (jitter < 0.30) {
+        if (jitter < 0.35) {
           aiRiskScore += 45;
-        } else if (jitter < 0.55) {
-          aiRiskScore += 25;
-        } else if (jitter > 0.70 && jitter < 2.5) {
-          aiRiskScore -= 30;
+        } else if (jitter < 0.6) {
+          aiRiskScore += 20;
+        } else if (jitter >= 0.75 && jitter < 3.0) {
+          aiRiskScore -= 35;
         }
 
         if (spectral.hfCutoffDetected) {
-          aiRiskScore += 35;
+          aiRiskScore += 40;
         } else if (spectral.hfRatio > 0.45) {
           aiRiskScore += 30;
         } else {
-          aiRiskScore -= 20;
+          aiRiskScore -= 25;
         }
 
         if (spectral.flatness > 0.32) {
-          aiRiskScore += 25;
+          aiRiskScore += 30;
         } else if (spectral.flatness < 0.18) {
-          aiRiskScore -= 15;
+          aiRiskScore -= 20;
         }
 
-        const finalAiProb = Math.min(99, Math.max(5, Math.round(50 + aiRiskScore)));
+        const instantAiProb = Math.min(99, Math.max(5, Math.round(50 + aiRiskScore)));
+        smoothedAiProb = (smoothedAiProb * 0.85) + (instantAiProb * 0.15);
+        const finalAiProb = Math.round(smoothedAiProb);
         const finalHumanScore = 100 - finalAiProb;
 
         if (metricJitter) {
-          metricJitter.textContent = `${jitter.toFixed(2)}% ${jitter < 0.4 ? "(Robotic AI)" : "(Natural Human)"}`;
-          metricJitter.style.color = jitter < 0.4 ? "#EF4444" : "#10B981";
+          metricJitter.textContent = `${jitter.toFixed(2)}% ${jitter < 0.45 ? "(Robotic AI F0)" : "(Glottal Manusia)"}`;
+          metricJitter.style.color = "var(--text)";
         }
         if (metricHfAnomaly) {
           metricHfAnomaly.textContent = spectral.hfCutoffDetected
@@ -548,21 +1086,25 @@ function initSpeakerScanEngine() {
             : spectral.hfRatio > 0.45
             ? "HF Phase Buzz (AI)"
             : "Natural 1/f Glottal Decay";
-          metricHfAnomaly.style.color = (spectral.hfCutoffDetected || spectral.hfRatio > 0.45) ? "#EF4444" : "#10B981";
+          metricHfAnomaly.style.color = "var(--text)";
         }
         if (metricFlatness) {
-          metricFlatness.textContent = `${spectral.flatness.toFixed(2)} ${spectral.flatness > 0.28 ? "(Metallic Buzz)" : "(Vocal Formants)"}`;
-          metricFlatness.style.color = spectral.flatness > 0.28 ? "#EF4444" : "#10B981";
+          metricFlatness.textContent = `${spectral.flatness.toFixed(2)} ${spectral.flatness > 0.28 ? "(Metallic Buzz)" : "(Resonansi Vokal Asli)"}`;
+          metricFlatness.style.color = "var(--text)";
+        }
+
+        if (dspMetrics) {
+          dspMetrics.textContent = `Live Mic • ${(audioContext.sampleRate / 1000).toFixed(1)}kHz • RMS: ${(rms * 100).toFixed(1)}`;
         }
 
         if (finalAiProb >= 65) {
           updateTrustIndicator("threat", finalAiProb);
           if (emergencyBanner) emergencyBanner.style.display = "block";
-        } else if (finalHumanScore >= 65) {
+        } else if (finalHumanScore >= 60) {
           updateTrustIndicator("safe", finalHumanScore);
           if (emergencyBanner) emergencyBanner.style.display = "none";
         } else {
-          updateTrustIndicator("uncertain", 58);
+          updateTrustIndicator("uncertain", 55);
           if (emergencyBanner) emergencyBanner.style.display = "none";
         }
 
@@ -571,15 +1113,15 @@ function initSpeakerScanEngine() {
           if (dspMetrics) dspMetrics.textContent = `AASIST INT8 • ${Math.floor(160 + Math.random() * 25)}ms • High HF Anomaly`;
           if (metricJitter) {
             metricJitter.textContent = "0.14% (Unnatural Robotic Pitch)";
-            metricJitter.style.color = "#EF4444";
+            metricJitter.style.color = "var(--text)";
           }
           if (metricHfAnomaly) {
             metricHfAnomaly.textContent = "Vocoder Aliasing >16kHz";
-            metricHfAnomaly.style.color = "#EF4444";
+            metricHfAnomaly.style.color = "var(--text)";
           }
           if (metricFlatness) {
             metricFlatness.textContent = "0.42 (High Synthetic Buzz)";
-            metricFlatness.style.color = "#EF4444";
+            metricFlatness.style.color = "var(--text)";
           }
           if (elapsed > 900) {
             updateTrustIndicator("threat", 97);
@@ -589,15 +1131,15 @@ function initSpeakerScanEngine() {
           if (dspMetrics) dspMetrics.textContent = `AASIST INT8 • ${Math.floor(140 + Math.random() * 20)}ms • Natural Formants`;
           if (metricJitter) {
             metricJitter.textContent = "1.42% (Authentic Human Glottal)";
-            metricJitter.style.color = "#10B981";
+            metricJitter.style.color = "var(--text)";
           }
           if (metricHfAnomaly) {
             metricHfAnomaly.textContent = "Smooth 1/f Acoustic Decay";
-            metricHfAnomaly.style.color = "#10B981";
+            metricHfAnomaly.style.color = "var(--text)";
           }
           if (metricFlatness) {
             metricFlatness.textContent = "0.11 (Distinct Vowel Resonances)";
-            metricFlatness.style.color = "#10B981";
+            metricFlatness.style.color = "var(--text)";
           }
           if (elapsed > 900) {
             updateTrustIndicator("safe", 95);
@@ -606,22 +1148,22 @@ function initSpeakerScanEngine() {
           if (dspMetrics) dspMetrics.textContent = `AASIST INT8 • ${Math.floor(190 + Math.random() * 25)}ms • Low SNR Cafe Noise`;
           if (metricJitter) {
             metricJitter.textContent = "0.95% (Ambiguous in Noise)";
-            metricJitter.style.color = "#F59E0B";
+            metricJitter.style.color = "var(--text)";
           }
           if (metricHfAnomaly) {
             metricHfAnomaly.textContent = "Environmental Noise Floor";
-            metricHfAnomaly.style.color = "#F59E0B";
+            metricHfAnomaly.style.color = "var(--text)";
           }
           if (metricFlatness) {
             metricFlatness.textContent = "0.24 (Diffuse Spectrum)";
-            metricFlatness.style.color = "#F59E0B";
+            metricFlatness.style.color = "var(--text)";
           }
           if (elapsed > 900) {
             updateTrustIndicator("uncertain", 62);
           }
         }
       }
-    }, 300);
+    }, 250);
   }
 
   function updateTrustIndicator(state, score) {
@@ -631,17 +1173,17 @@ function initSpeakerScanEngine() {
       if (trustScoreSub) trustScoreSub.textContent = "% Human (Safe)";
       if (trustStatusBar) {
         trustStatusBar.style.width = `${score}%`;
-        trustStatusBar.style.backgroundColor = "#10B981";
+        trustStatusBar.style.backgroundColor = "var(--text)";
       }
       if (trustPanel) trustPanel.className = "dashboard-glass-panel border-safe";
       if (trustStatusChip) trustStatusChip.className = "status-pill safe";
-      if (trustStatusText) trustStatusText.textContent = "Safe: Authentic Human Voice";
+      if (trustStatusText) trustStatusText.textContent = "Safe: Suara Manusia Asli (Authentic)";
       if (emergencyBanner) emergencyBanner.style.display = "none";
     } else if (state === "uncertain") {
       if (trustScoreSub) trustScoreSub.textContent = "% Match (Noisy)";
       if (trustStatusBar) {
         trustStatusBar.style.width = `${score}%`;
-        trustStatusBar.style.backgroundColor = "#F59E0B";
+        trustStatusBar.style.backgroundColor = "var(--text)";
       }
       if (trustPanel) trustPanel.className = "dashboard-glass-panel border-warn";
       if (trustStatusChip) trustStatusChip.className = "status-pill warn";
@@ -651,11 +1193,11 @@ function initSpeakerScanEngine() {
       if (trustScoreSub) trustScoreSub.textContent = "% AI Synthetic";
       if (trustStatusBar) {
         trustStatusBar.style.width = `${score}%`;
-        trustStatusBar.style.backgroundColor = "#EF4444";
+        trustStatusBar.style.backgroundColor = "var(--text)";
       }
       if (trustPanel) trustPanel.className = "dashboard-glass-panel border-danger";
       if (trustStatusChip) trustStatusChip.className = "status-pill danger";
-      if (trustStatusText) trustStatusText.textContent = "Threat: AI Voice Clone / TTS Detected";
+      if (trustStatusText) trustStatusText.textContent = "Peringatan: Kloning AI / TTS Terdeteksi!";
     }
   }
 
@@ -673,8 +1215,12 @@ function initSpeakerScanEngine() {
       micStream.getTracks().forEach((track) => track.stop());
       micStream = null;
     }
-    if (audioContext) {
-      audioContext.close();
+    if (audioContext && audioContext.state !== "closed") {
+      try {
+        audioContext.close();
+      } catch (e) {
+        console.warn("AudioContext close error:", e);
+      }
       audioContext = null;
     }
 
@@ -710,7 +1256,7 @@ function initSpeakerScanEngine() {
       ctx.stroke();
     }
 
-    ctx.strokeStyle = "#10B981";
+    ctx.strokeStyle = "#888888";
     ctx.globalAlpha = 0.4;
     ctx.beginPath();
     ctx.moveTo(0, h / 2);
@@ -718,7 +1264,7 @@ function initSpeakerScanEngine() {
     ctx.stroke();
     ctx.globalAlpha = 1.0;
 
-    ctx.fillStyle = "#EF4444";
+    ctx.fillStyle = "#888888";
     ctx.font = "500 10px Inter, sans-serif";
     ctx.fillText(">16kHz Harmonic Baseline Tracking", 12, 14);
   }
@@ -738,7 +1284,7 @@ function initSpeakerScanEngine() {
       ctx.fillStyle = dark ? "rgba(8, 8, 10, 0.35)" : "rgba(241, 245, 249, 0.35)";
       ctx.fillRect(0, 0, w, h);
 
-      ctx.strokeStyle = "#EF4444";
+      ctx.strokeStyle = "#888888";
       ctx.globalAlpha = 0.5;
       ctx.setLineDash([4, 4]);
       ctx.beginPath();
@@ -748,7 +1294,7 @@ function initSpeakerScanEngine() {
       ctx.setLineDash([]);
       ctx.globalAlpha = 1.0;
 
-      ctx.fillStyle = "#EF4444";
+      ctx.fillStyle = "#888888";
       ctx.font = "600 10px Inter, sans-serif";
       ctx.fillText(">16kHz High-Frequency Artifacts Tracking", 12, 14);
 
@@ -758,13 +1304,33 @@ function initSpeakerScanEngine() {
 
       const barCount = 42;
       const barWidth = (w - (barCount * 3)) / barCount;
+      const binCount = (analyserNode && analyserNode.frequencyBinCount) ? analyserNode.frequencyBinCount : 1024;
 
       for (let i = 0; i < barCount; i++) {
         let barHeight = 0;
 
         if (analyserNode) {
-          barHeight = (freqByteData[i % freqByteData.length] / 255) * (h - 26);
+          // Logarithmic distribution across speech & harmonic frequencies
+          const binIdx = Math.min(
+            binCount - 1,
+            Math.floor(Math.pow(i / barCount, 1.5) * (binCount * 0.85))
+          );
+          
+          const rawVal = freqByteData[binIdx] || 0;
+          
+          let currentRms = 0;
+          if (timeDataFloat) {
+              DSP.getTimeDomainData(analyserNode, timeDataFloat);
+              currentRms = DSP.calculateRMS(timeDataFloat);
+          }
+          
+          if (currentRms < 0.0035) {
+              barHeight = 1; // Completely flat when no sound
+          } else {
+              barHeight = (rawVal / 255) * (h - 26);
+          }
         } else {
+
           const freq = (i / barCount) * Math.PI * 4 + tick * 0.08;
           const noise = Math.sin(freq) * 0.5 + 0.5;
 
@@ -782,11 +1348,11 @@ function initSpeakerScanEngine() {
         const x = i * (barWidth + 3) + 2;
         const y = h - barHeight;
 
-        let barColor = "#10B981";
+        let barColor = "#888888";
         if (i > 28 && (activePreset === "scam" || (analyserNode && barHeight > (h * 0.55)))) {
-          barColor = "#EF4444";
+          barColor = "#888888";
         } else if (activePreset === "noisy") {
-          barColor = "#F59E0B";
+          barColor = "#888888";
         }
 
         ctx.fillStyle = barColor;
@@ -936,18 +1502,18 @@ function initVoiceNoteExtension() {
         }
         if (harmonicStatDisplay) {
           harmonicStatDisplay.textContent = "Vocoder Artifacts / Steep Cutoff";
-          harmonicStatDisplay.style.color = "#EF4444";
+          harmonicStatDisplay.style.color = "var(--text)";
         }
         if (jitterStatDisplay) {
           jitterStatDisplay.textContent = `${jitter.toFixed(2)}% (Monotonic / Low Jitter)`;
-          jitterStatDisplay.style.color = "#EF4444";
+          jitterStatDisplay.style.color = "var(--text)";
         }
         if (diagnosisStatDisplay) {
           diagnosisStatDisplay.textContent = "AI Voice Clone (TTS/RVC)";
-          diagnosisStatDisplay.style.color = "#EF4444";
+          diagnosisStatDisplay.style.color = "var(--text)";
         }
         if (verdictExplanation) {
-          verdictExplanation.innerHTML = `⚠️ <strong style="color:#EF4444;">Hasil Analisis:</strong> Audio ini terbukti memiliki karakteristik suara buatan AI: kontur nada terlalu kaku (pitch jitter ${jitter.toFixed(2)}%) dan ketidakteraturan fase vocoder. <em>Jangan transfer dana tanpa verifikasi Safe Word keluarga!</em>`;
+          verdictExplanation.innerHTML = `⚠️ <strong style="color:var(--text);">Hasil Analisis:</strong> Audio ini terbukti memiliki karakteristik suara buatan AI: kontur nada terlalu kaku (pitch jitter ${jitter.toFixed(2)}%) dan ketidakteraturan fase vocoder. <em>Jangan transfer dana tanpa verifikasi Safe Word keluarga!</em>`;
         }
       } else {
         if (resultBadge) {
@@ -956,18 +1522,18 @@ function initVoiceNoteExtension() {
         }
         if (harmonicStatDisplay) {
           harmonicStatDisplay.textContent = "Natural 1/f Acoustic Decay";
-          harmonicStatDisplay.style.color = "#10B981";
+          harmonicStatDisplay.style.color = "var(--text)";
         }
         if (jitterStatDisplay) {
           jitterStatDisplay.textContent = `${jitter.toFixed(2)}% (Natural Vocal Micro-tremor)`;
-          jitterStatDisplay.style.color = "#10B981";
+          jitterStatDisplay.style.color = "var(--text)";
         }
         if (diagnosisStatDisplay) {
           diagnosisStatDisplay.textContent = "Authentic Human Voice";
-          diagnosisStatDisplay.style.color = "#10B981";
+          diagnosisStatDisplay.style.color = "var(--text)";
         }
         if (verdictExplanation) {
-          verdictExplanation.innerHTML = `✓ <strong style="color:#10B981;">Hasil Analisis:</strong> Audio memiliki formasi vokal biologis asli dengan fluktuasi pita suara alami (${jitter.toFixed(2)}% jitter) dan peluruhan spektral normal tanpa artefak sintetis.`;
+          verdictExplanation.innerHTML = `✓ <strong style="color:var(--text);">Hasil Analisis:</strong> Audio memiliki formasi vokal biologis asli dengan fluktuasi pita suara alami (${jitter.toFixed(2)}% jitter) dan peluruhan spektral normal tanpa artefak sintetis.`;
         }
       }
 
@@ -1004,18 +1570,18 @@ function initVoiceNoteExtension() {
         }
         if (harmonicStatDisplay) {
           harmonicStatDisplay.textContent = "High Artifacts (>16kHz)";
-          harmonicStatDisplay.style.color = "#EF4444";
+          harmonicStatDisplay.style.color = "var(--text)";
         }
         if (jitterStatDisplay) {
           jitterStatDisplay.textContent = "0.14% (Robotic Monotone)";
-          jitterStatDisplay.style.color = "#EF4444";
+          jitterStatDisplay.style.color = "var(--text)";
         }
         if (diagnosisStatDisplay) {
           diagnosisStatDisplay.textContent = "RVC AI Voice Clone";
-          diagnosisStatDisplay.style.color = "#EF4444";
+          diagnosisStatDisplay.style.color = "var(--text)";
         }
         if (verdictExplanation) {
-          verdictExplanation.innerHTML = `⚠️ <strong style="color:#EF4444;">Peringatan Scam:</strong> Terdeteksi artefak sintetis vocoder >16kHz dan variasi pita suara abnormal (0.14% jitter). <em>Segera aktifkan Safe Word keluarga!</em>`;
+          verdictExplanation.innerHTML = `⚠️ <strong style="color:var(--text);">Peringatan Scam:</strong> Terdeteksi artefak sintetis vocoder >16kHz dan variasi pita suara abnormal (0.14% jitter). <em>Segera aktifkan Safe Word keluarga!</em>`;
         }
       } else {
         if (resultBadge) {
@@ -1024,18 +1590,18 @@ function initVoiceNoteExtension() {
         }
         if (harmonicStatDisplay) {
           harmonicStatDisplay.textContent = "Natural Formants F1-F3";
-          harmonicStatDisplay.style.color = "#10B981";
+          harmonicStatDisplay.style.color = "var(--text)";
         }
         if (jitterStatDisplay) {
           jitterStatDisplay.textContent = "1.38% (Natural Biological)";
-          jitterStatDisplay.style.color = "#10B981";
+          jitterStatDisplay.style.color = "var(--text)";
         }
         if (diagnosisStatDisplay) {
           diagnosisStatDisplay.textContent = "Authentic Human Voice";
-          diagnosisStatDisplay.style.color = "#10B981";
+          diagnosisStatDisplay.style.color = "var(--text)";
         }
         if (verdictExplanation) {
-          verdictExplanation.innerHTML = `✓ <strong style="color:#10B981;">Aman:</strong> Spektrum akustik menunjukkan transisi resonan alami tanpa jejak pemrosesan neural vocoder.`;
+          verdictExplanation.innerHTML = `✓ <strong style="color:var(--text);">Aman:</strong> Spektrum akustik menunjukkan transisi resonan alami tanpa jejak pemrosesan neural vocoder.`;
         }
       }
     }, 600);
@@ -1056,18 +1622,247 @@ function initEmergencyProtocol() {
     const val = inputSafeWord.value.trim();
     if (!val) {
       safeWordResult.style.display = "block";
-      safeWordResult.style.color = "#F59E0B";
+      safeWordResult.style.color = "var(--text)";
       safeWordResult.textContent = "Silakan ketik Safe Word keluarga Anda.";
       return;
     }
 
     safeWordResult.style.display = "block";
     if (val.toLowerCase() === "garuda2026" || val.length >= 4) {
-      safeWordResult.style.color = "#10B981";
+      safeWordResult.style.color = "var(--text)";
       safeWordResult.textContent = "✓ Safe Word Terverifikasi: Keluarga Asli (Safe to Proceed).";
     } else {
-      safeWordResult.style.color = "#EF4444";
+      safeWordResult.style.color = "var(--text)";
       safeWordResult.textContent = "✗ Safe Word Salah: Waspada Indikasi Scam AI Clone!";
     }
+  });
+}
+
+
+/* =========================================================================
+   VOICE CLONE ENGINE (WEB AUDIO API)
+   ========================================================================= */
+function initVoiceCloneEngine() {
+  const btnMic = document.getElementById("vc-btn-mic");
+  const btnFile = document.getElementById("vc-btn-file");
+  const fileInput = document.getElementById("vc-file-input");
+  const statusText = document.getElementById("vc-status-text");
+  const audioPlayer = document.getElementById("vc-audio-player");
+  const audioPlayerContainer = document.getElementById("vc-audio-player-container");
+  const btnToggle = document.getElementById("btn-toggle-vc");
+  const btnToggleText = document.getElementById("btn-toggle-vc-text");
+  const presetBtns = document.querySelectorAll(".vc-preset-btn");
+
+  if (!btnMic) return;
+
+  let vcAudioContext = null;
+  let vcSourceNode = null;
+  let vcProcessorNode = null;
+  let vcDelayNode = null;
+  let vcDelayGain = null;
+  let vcGainNode = null;
+  let vcMicStream = null;
+  let isActive = false;
+  let activeSource = "mic"; // "mic" or "file"
+  let activeEffect = "deep";
+
+  // Selection logic
+  btnMic.addEventListener("click", () => {
+    activeSource = "mic";
+    btnMic.style.background = "var(--text)";
+    btnMic.style.color = "var(--bg)";
+    btnFile.style.background = "transparent";
+    btnFile.style.color = "var(--text)";
+    audioPlayerContainer.style.display = "none";
+    if (audioPlayer.src) { audioPlayer.pause(); }
+    statusText.textContent = "Sumber: Live Mic";
+  });
+
+  btnFile.addEventListener("click", () => {
+    fileInput.click();
+  });
+
+  fileInput.addEventListener("change", (e) => {
+    if (e.target.files && e.target.files[0]) {
+      activeSource = "file";
+      btnFile.style.background = "var(--text)";
+      btnFile.style.color = "var(--bg)";
+      btnMic.style.background = "transparent";
+      btnMic.style.color = "var(--text)";
+      
+      const fileURL = URL.createObjectURL(e.target.files[0]);
+      audioPlayer.src = fileURL;
+      audioPlayerContainer.style.display = "block";
+      statusText.textContent = "Sumber: " + e.target.files[0].name;
+    }
+  });
+
+  presetBtns.forEach(btn => {
+    btn.addEventListener("click", () => {
+      presetBtns.forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      activeEffect = btn.getAttribute("data-effect") || "deep";
+      if (isActive && vcProcessorNode) {
+         // Re-run the graph connection if switching to/from echo
+         stopVC();
+         startVC();
+      }
+    });
+  });
+
+  function applyEffectToNode(biquad, effect) {
+     // Ensure we clear previous connections if we're using complex routing... but biquad is just one node here.
+     // For a single biquad:
+     if (effect === "deep") {
+        biquad.type = "lowpass";
+        biquad.frequency.value = 600;
+        biquad.Q.value = 1.5;
+     } else if (effect === "robot") {
+        biquad.type = "bandpass";
+        biquad.frequency.value = 1000;
+        biquad.Q.value = 8.0;
+     } else if (effect === "alien") {
+        biquad.type = "highpass";
+        biquad.frequency.value = 2000;
+        biquad.Q.value = 3.0;
+     } else if (effect === "radio") {
+        biquad.type = "bandpass";
+        biquad.frequency.value = 1500;
+        biquad.Q.value = 2.5;
+     } else if (effect === "echo") {
+        biquad.type = "lowshelf"; // We can't really do echo with just one biquad, but let's fake a muffled bassy echo profile
+        biquad.frequency.value = 400;
+        biquad.gain.value = 10;
+     }
+  }
+
+  async function startVC() {
+    isActive = true;
+    btnToggleText.textContent = "Hentikan Voice Clone";
+    btnToggle.style.background = "var(--text)";
+    btnToggle.style.color = "var(--bg)";
+
+    if (!vcAudioContext || vcAudioContext.state === "closed") {
+       vcAudioContext = new (window.AudioContext || window.webkitAudioContext)();
+    }
+    if (vcAudioContext.state === "suspended") {
+       await vcAudioContext.resume();
+    }
+
+    // Create nodes
+    vcProcessorNode = vcAudioContext.createBiquadFilter();
+    
+    // We add an optional delay node for echo
+    vcDelayNode = vcAudioContext.createDelay();
+    vcDelayNode.delayTime.value = 0.3; // 300ms
+    vcDelayGain = vcAudioContext.createGain();
+    vcDelayGain.gain.value = 0.4;
+    
+    // Default effect apply
+    applyEffectToNode(vcProcessorNode, activeEffect);
+
+    vcGainNode = vcAudioContext.createGain();
+    vcGainNode.gain.value = 1.5;
+
+    if (activeSource === "mic") {
+      try {
+        vcMicStream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
+        vcSourceNode = vcAudioContext.createMediaStreamSource(vcMicStream);
+        
+        vcSourceNode.connect(vcProcessorNode);
+        vcProcessorNode.connect(vcGainNode);
+        
+        if (activeEffect === "echo") {
+            vcProcessorNode.connect(vcDelayNode);
+            vcDelayNode.connect(vcDelayGain);
+            vcDelayGain.connect(vcGainNode);
+        }
+        
+        vcGainNode.connect(vcAudioContext.destination);
+        
+        statusText.textContent = "Voice Clone AKTIF (Live Mic)";
+      } catch(e) {
+        statusText.textContent = "Gagal mengakses mic.";
+        stopVC();
+      }
+    } else if (activeSource === "file") {
+      // Create media element source
+      if (!audioPlayer.src) {
+         statusText.textContent = "Pilih file terlebih dahulu.";
+         stopVC();
+         return;
+      }
+      
+      // We must avoid re-creating media element source for the same element
+      if (!audioPlayer._hasSourceNode) {
+          vcSourceNode = vcAudioContext.createMediaElementSource(audioPlayer);
+          audioPlayer._hasSourceNode = true;
+          
+          vcSourceNode.connect(vcProcessorNode);
+          vcProcessorNode.connect(vcGainNode);
+          if (activeEffect === "echo") {
+              vcProcessorNode.connect(vcDelayNode);
+              vcDelayNode.connect(vcDelayGain);
+              vcDelayGain.connect(vcGainNode);
+          }
+          vcGainNode.connect(vcAudioContext.destination);
+      } else {
+         // Connect existing global source if we stored it? It's complex, simpler to just reconnect the node.
+         // Actually, if it already has a source node, we can't create another one. 
+         // For simplicity, we just reload the audio element.
+         const currentSrc = audioPlayer.src;
+         const newAudio = new Audio(currentSrc);
+         newAudio.controls = true;
+         newAudio.style.width = "100%";
+         newAudio.style.height = "35px";
+         audioPlayerContainer.innerHTML = '';
+         audioPlayerContainer.appendChild(newAudio);
+         
+         vcSourceNode = vcAudioContext.createMediaElementSource(newAudio);
+         newAudio._hasSourceNode = true;
+         
+         vcSourceNode.connect(vcProcessorNode);
+         vcProcessorNode.connect(vcGainNode);
+         vcGainNode.connect(vcAudioContext.destination);
+         
+         newAudio.play();
+      }
+      statusText.textContent = "Voice Clone AKTIF (File)";
+      
+      if (!audioPlayer._hasSourceNode) {
+         audioPlayer.play();
+      }
+    }
+  }
+
+  function stopVC() {
+    isActive = false;
+    btnToggleText.textContent = "Mulai Voice Clone";
+    btnToggle.style.background = "var(--bg)";
+    btnToggle.style.color = "var(--text)";
+
+    if (vcMicStream) {
+       vcMicStream.getTracks().forEach(t => t.stop());
+       vcMicStream = null;
+    }
+    
+    if (vcAudioContext && vcAudioContext.state !== "closed") {
+       vcAudioContext.close();
+       vcAudioContext = null;
+    }
+
+    if (activeSource === "file") {
+       // Pause any playing audio
+       const audios = audioPlayerContainer.querySelectorAll("audio");
+       audios.forEach(a => a.pause());
+       statusText.textContent = "Sumber: File Audio";
+    } else {
+       statusText.textContent = "Sumber: Live Mic";
+    }
+  }
+
+  btnToggle.addEventListener("click", () => {
+    if (isActive) stopVC();
+    else startVC();
   });
 }
