@@ -67,8 +67,7 @@
           <button class="nav-link active" id="nav-home" data-view="view-home">Home</button>
           <button class="nav-link" id="nav-features" data-view="view-features">Features</button>
           <button class="nav-link" id="nav-solutions" data-view="view-solutions">Solutions</button>
-          <button class="nav-link" id="nav-pricing" data-view="view-pricing">Pricing</button>
-          <button class="nav-link" id="nav-specs" data-view="view-specs">Specs</button>
+                    <button class="nav-link" id="nav-specs" data-view="view-specs">Specs</button>
           <button class="nav-link" id="nav-dashboard" data-view="view-dashboard" style="display: none;">
             <span style="display: flex; align-items: center; gap: 5px;">
               <span class="pulse-dot"></span>
@@ -113,12 +112,7 @@
         <button class="mobile-nav-link" data-view="view-solutions">
           <span>Solutions (B2B &amp; Family)</span>
           <i class="fa-solid fa-building-shield" style="font-size: 14px; "></i>
-        </button>
-        <button class="mobile-nav-link" data-view="view-pricing">
-          <span>Pricing Plans</span>
-          <i class="fa-solid fa-tags" style="font-size: 14px; "></i>
-        </button>
-        <button class="mobile-nav-link" data-view="view-specs">
+        </button>        <button class="mobile-nav-link" data-view="view-specs">
           <span>Specs &amp; Architecture</span>
           <i class="fa-solid fa-microchip" style="font-size: 14px;"></i>
         </button>
@@ -141,7 +135,7 @@
         <!-- VIEW 1: HOME (SaaS Landing Page) -->
         <section class="view-panel active" id="view-home">
           <!-- Trust row with User Avatars -->
-          <div class="trust-row anim" id="trust-row-badge" style="--d: 0.05s" data-navigate="view-pricing">
+          <div class="trust-row anim" id="trust-row-badge" style="--d: 0.05s" >
             <div class="avatar-group">
               <div class="avatar-ring a1">
                 <div class="avatar-inner">
@@ -359,78 +353,6 @@
             </div>
           </div>
         </section>
-
-        <!-- VIEW 4: PRICING (SaaS Subscription Tiers) -->
-        <section class="view-panel" id="view-pricing">
-          <div class="dashboard-glass-panel saas-feature-panel">
-            <div class="saas-view-header">
-              <div>
-                <span class="badge-tag orange"><i class="fa-solid fa-tags"></i> SaaS Pricing</span>
-                <h2 class="saas-section-title">Paket Fleksibel Sesuai Kebutuhan Anda</h2>
-              </div>
-              <span class="status-pill safe" style="font-size: 11px;">Privacy Protected</span>
-            </div>
-
-            <div class="pricing-deck-grid">
-              <!-- Tier 1: Personal Shield -->
-              <div class="pricing-card">
-                <div class="pricing-tier-badge">Personal Shield</div>
-                <div class="pricing-price-box">
-                  <span class="pricing-currency">$</span>
-                  <span class="pricing-amount">0</span>
-                  <span class="pricing-period">/bulan</span>
-                </div>
-                <p class="pricing-desc">Perlindungan dasar untuk penggunaan harian dan keluarga.</p>
-                <ul class="pricing-features-list">
-                  <li><i class="fa-solid fa-check"></i> 10 Real-time Call Scan / hari</li>
-                  <li><i class="fa-solid fa-check"></i> Voice Note Share Extension</li>
-                  <li><i class="fa-solid fa-check"></i> Family Safe Words</li>
-                  <li><i class="fa-solid fa-check"></i> In-Memory Privacy</li>
-                </ul>
-                <button class="pricing-cta-btn" id="btn-pricing-free">Pilih Starter (Gratis)</button>
-              </div>
-
-              <!-- Tier 2: Pro Plan (Recommended) -->
-              <div class="pricing-card featured">
-                <div class="pricing-featured-tag">Paling Populer</div>
-                <div class="pricing-tier-badge" style="color: var(--text);">Pro Plan</div>
-                <div class="pricing-price-box">
-                  <span class="pricing-currency">$</span>
-                  <span class="pricing-amount">19</span>
-                  <span class="pricing-period">/bulan</span>
-                </div>
-                <p class="pricing-desc">Perlindungan tanpa batas dengan prioritas inferensi DSP.</p>
-                <ul class="pricing-features-list">
-                  <li><i class="fa-solid fa-check"></i> <strong>Unlimited Live Mic &amp; Call Scan</strong></li>
-                  <li><i class="fa-solid fa-check"></i> Auto WhatsApp &amp; Telegram Guard</li>
-                  <li><i class="fa-solid fa-check"></i> 5 Kursi Akun Anggota Keluarga</li>
-                  <li><i class="fa-solid fa-check"></i> Laporan Audit Forensik &gt;16kHz</li>
-                  <li><i class="fa-solid fa-check"></i> Prioritas Latensi &lt;150ms</li>
-                </ul>
-                <button class="pricing-cta-btn featured-btn" id="btn-pricing-pro">Mulai Akses Pro</button>
-              </div>
-
-              <!-- Tier 3: Enterprise Sentinel -->
-              <div class="pricing-card">
-                <div class="pricing-tier-badge">Enterprise</div>
-                <div class="pricing-price-box">
-                  <span class="pricing-currency">$</span>
-                  <span class="pricing-amount">99</span>
-                  <span class="pricing-period">/bulan</span>
-                </div>
-                <p class="pricing-desc">Integrasi PBX, SIP Trunking, dan API Call Center.</p>
-                <ul class="pricing-features-list">
-                  <li><i class="fa-solid fa-check"></i> Full VoIP &amp; SIP Gateway</li>
-                  <li><i class="fa-solid fa-check"></i> Kursi Agen Tak Terbatas</li>
-                  <li><i class="fa-solid fa-check"></i> Custom Acoustic Threshold</li>
-                  <li><i class="fa-solid fa-check"></i> SLA 99.9% &amp; Dedicated Support</li>
-                </ul>
-                <button class="pricing-cta-btn" id="btn-pricing-enterprise">Hubungi Sales / Coba API</button>
-              </div>
-            </div>
-          </div>
-        </section>
-
         <!-- VIEW 5: TECH SPECS & ARCHITECTURE -->
         <section class="view-panel" id="view-specs">
           <div class="dashboard-glass-panel">

@@ -204,13 +204,10 @@ function initAuthSystem() {
     });
   }
 
-  // Feature, Solution, Pricing, Specs CTAs -> Dashboard
+  // Feature, Solution, Specs CTAs -> Dashboard
   [
     "btn-features-try-dashboard",
     "btn-solutions-get-started",
-    "btn-pricing-free",
-    "btn-pricing-pro",
-    "btn-pricing-enterprise",
     "btn-specs-open-dashboard"
   ].forEach((id) => {
     const btn = document.getElementById(id);
